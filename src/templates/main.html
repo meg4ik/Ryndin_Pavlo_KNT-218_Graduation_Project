@@ -4,10 +4,12 @@
 {% endblock %}
 {% block content %}
 <div class="row">
-<div class="col-2"><i class="fa fa-plus" aria-hidden="true"></i>Add genre</div>
-<div class="col-8"></div>
-<div class="col-2">
-    ewergregregregergreg
-</div>
+    <div class="col-2"><i class="fa fa-plus" aria-hidden="true"></i>Add genre</div>
+    <div class="col-8"></div>
+    <div class="col-2">
+        <form action="{{ url_for('main') }}">
+            <input type="search" name="search">
+        </form>
+    </div>
 </div>
 {% endblock %}

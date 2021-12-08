@@ -1,7 +1,20 @@
 import uuid
-
 from flask_bcrypt import check_password_hash, generate_password_hash
 from src import db
+
+class Role(db.Model):
+    """
+    Role model
+    """
+    __tablename__ = 'role'
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(40), nullable=False, unique=True)
+    code = db.Column(db.Integer, nullable=False)
+    user_role_to = db.relationship("User",backref='role',lazy=True)
+
+    def __repr__(self):
+        return f'Role({self.title})'
 
 class User(db.Model):
     """
@@ -18,14 +31,25 @@ class User(db.Model):
     uuid = db.Column(db.String(36), unique=True)
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'), nullable=False)
 
-    def __init__(self, username, name, surname, email_address, password, role):
+    def __init__(self, username, name, surname, email_address, password, code):
         self.username = username
         self.name = name
         self.surname = surname
         self.email_address = email_address
         self.password = generate_password_hash(password).decode('utf8')
         self.uuid = str(uuid.uuid4())
+
+        role = db.session.query(Role).filter(Role.code == code).first()
         self.role_id = role.id
+
+    # def __init__(self, title):
+    #     self.title = title
+    #     if title == "Admin":
+    #         self.code = 3
+    #     elif title == "Manager":
+    #         self.code = 2
+    #     else:
+    #         self.code = 1
 
     def __repr__(self):
         return f'User({self.surname}, {self.name})'
@@ -44,30 +68,6 @@ class User(db.Model):
         db.session.add(self)
         db.session.commit()
         db.session.close()
-
-
-class Role(db.Model):
-    """
-    Role model
-    """
-    __tablename__ = 'role'
-
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(40), nullable=False, unique=True)
-    code = db.Column(db.Integer, nullable=False)
-    user_role_to = db.relationship("User",backref='role',lazy=True)
-
-    def __init__(self, title):
-        self.title = title
-        if title == "Admin":
-            self.code = 3
-        elif title == "Manager":
-            self.code = 2
-        else:
-            self.code = 1
-
-    def __repr__(self):
-        return f'Role({self.title})'
 
 # class Project(db.Model):
 #     """

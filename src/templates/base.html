@@ -12,7 +12,20 @@
           {% endblock %}
       </title>
    </head>
+   {% with messages = get_flashed_messages(with_categories=true) %}
+         {% if messages %}
+            {% for category, message in messages %}
+               <div class="alert alert-{{ category }}">
+                     <button type="button" class="m1-2 mb-1 close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                     </button>
+                     {{ message }}
+               </div>
+            {% endfor %}
+         {% endif %}
+   {% endwith %}
    <body>
+      {% if not nav %}
          <nav class="navbar navbar-expand-md">
             <a href="{{ url_for('main') }}" >
                <img src="../static/logo.png" alt="logo" width="60" height="30">
@@ -47,30 +60,22 @@
                            <a class="nav-link" href="">Sign in</a>
                         </li>
                         <li class="nav-item">
-                           <a class="nav-link" href="">Sign up</a>
+                           <a class="nav-link" href="{{ url_for('register') }}">Sign up</a>
                         </li>
                      {% endif %}
                   {% endif %}
                </ul>
          </nav>
+         {% endif %}
    
 
-         {% with messages = get_flashed_messages(with_categories=true) %}
-         {% if messages %}
-            {% for category, message in messages %}
-               <div class="alert alert-{{ category }}">
-                     <button type="button" class="m1-2 mb-1 close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                     </button>
-                     {{ message }}
-               </div>
-            {% endfor %}
-         {% endif %}
-         {% endwith %}
 
-         <div class="container" style="background:#313131; padding: 15px;">
-         {% block content %}
-         {% endblock %}
+
+         <div class="container" style="background:#313131;">
+            <div class="position-relative overflow-hidden p-3">
+               {% block content %}
+               {% endblock %}
+            </div>
          </div>
 
          

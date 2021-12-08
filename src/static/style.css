@@ -1,9 +1,11 @@
-* {
-  background-color: #000000;
-}
 
 body {
   margin: 0 20%;
+  color: white;
+  background-color: #000000;
+}
+
+a {
   color: white;
 }
 
