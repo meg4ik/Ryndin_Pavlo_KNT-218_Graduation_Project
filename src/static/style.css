@@ -9,4 +9,13 @@ a {
   color: white;
 }
 
+.modal-content {
+  color: #000000;
+  text-align: center;
+  background-color: #e0e0e0;
+}
 
+.te {
+  margin: 20px;
+  text-align: left;
+}

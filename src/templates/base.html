@@ -12,18 +12,6 @@
           {% endblock %}
       </title>
    </head>
-   {% with messages = get_flashed_messages(with_categories=true) %}
-         {% if messages %}
-            {% for category, message in messages %}
-               <div class="alert alert-{{ category }}">
-                     <button type="button" class="m1-2 mb-1 close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                     </button>
-                     {{ message }}
-               </div>
-            {% endfor %}
-         {% endif %}
-   {% endwith %}
    <body>
       {% if not nav %}
          <nav class="navbar navbar-expand-md">
@@ -51,25 +39,62 @@
                            <a class="nav-link" href="" >{{ user.surname }} {{ user.name }}</a>
                         </li>
                         <li class="nav-item">
-                           <form action="" method="POST">
+                           <form action="{{ url_for('logout') }}" method="POST">
                               <input class="btn btn-primary" type="submit" name="Signout" value="Sign out">
                            </form>
                         </li>
                      {% else %}
                         <li class="nav-item">
-                           <a class="nav-link" href="">Sign in</a>
+                           <button type="button" class="btn btn-link nav-link" style="color: white;" data-toggle="modal" data-target="#Modal">Sign in</button>
+
+                           <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                              <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-body">
+                                    <h4 class="display-5" style="margin: 10px;">Please login</h5>
+                                    <form class="navbar-form text-center p-3" action="{{ url_for('login') }}" method="POST">
+                                          <div class="te">
+                                             <label for="fusername">User name:</label>
+                                             <br>
+                                             <input type="text" name="username" required style="width: 400px;">
+                                             <br>
+                                             <label for="fpassword">Password:</label>
+                                             <br>
+                                             <input type="password" name="password" required style="width: 400px;">
+                                             <br>
+                                             <p style="margin-top: 20px;"><input type="checkbox" name="remember">Remember me</p>
+                                          </div>
+                                          <button type="submit" class="btn btn-success">Sign in</button>
+
+                                    </form>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
                         </li>
                         <li class="nav-item">
-                           <a class="nav-link" href="{{ url_for('register') }}">Sign up</a>
+                           <form action="{{ url_for('register') }}">
+                              <input class="btn btn-link nav-link" style="color: white;" type="submit" name="Sign_up" value="Sign up">
+                           </form>
                         </li>
                      {% endif %}
                   {% endif %}
                </ul>
          </nav>
+         {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+               {% for category, message in messages %}
+                  <div class="alert alert-{{ category }}">
+                        <button type="button" class="m1-2 mb-1 close" data-dismiss="alert" aria-label="Close">
+                           <span aria-hidden="true">&times;</span>
+                        </button>
+                        {{ message }}
+                  </div>
+               {% endfor %}
+            {% endif %}
+         {% endwith %}
          {% endif %}
-   
-
-
 
          <div class="container" style="background:#313131;">
             <div class="position-relative overflow-hidden p-3">
@@ -77,9 +102,6 @@
                {% endblock %}
             </div>
          </div>
-
-         
-
 
    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

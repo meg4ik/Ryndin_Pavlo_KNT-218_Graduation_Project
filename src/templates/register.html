@@ -4,42 +4,36 @@
 {% endblock %}
 
 {% block content %}
-
-    <img class="mb-4 p-3" src="../static/logo.png" alt="logo" width="200" height="200">
-    <h1 class="h3 mb-3 fw-normal">Please Log in</h1>
+  <div class="text-center">
+    <a href="{{ url_for('main') }}">
+      <img class="mb-4 p-3 text-center" src="../static/logo.png" alt="logo" width="200" height="200">
+    </a>
+    <h1 class="h3 mb-3 fw-normal">Sign up</h1>
+  </div>
 
     <form class="form col-md-12 center-block" method="POST">
       <div class="form-group">
-        <input type="text" name="name" class="form-control input-lg" placeholder="Enter your username" required>
+        <input type="text" name="name" class="form-control input-lg" placeholder="First Name" required>
+      </div>
+      <div class="form-group">
+        <input type="text" name="surname" class="form-control input-lg" placeholder="Last Name" required>
+      </div>
+      <div class="form-group">
+        <input type="text" name="username" class="form-control input-lg" placeholder="Username" required>
+      </div>
+      <div class="form-group">
+        <input type="email" name="email_address" class="form-control input-lg" placeholder="E-mail" required>
+      </div>
+      <div class="form-group">
+        <input type="password" name="password" class="form-control input-lg" placeholder="Password" required>
+      </div>
+      <div class="form-group">
+        <input type="password" name="password_repeat" class="form-control input-lg" placeholder="Repeat password" required>
       </div>
       
       <div class="form-group">
         <button class="btn btn-primary btn-lg btn-block">Register</button>
       </div>
-    </form>
-
-
-    <form class="navbar-form text-center p-3" method="POST">
-
-    <label for="fname">First Name:</label>
-    <input type="text" name="name" required>
-    <br>
-    <label for="fsurname">Last Name:</label>
-    <input type="text" name="surname" required>
-    <br>
-    <label for="fusername">Username:</label>
-    <input type="text" name="username" required>
-    <br>
-    <label for="femail_address">E-mail:</label>
-    <input type="email" name="email_address" required>
-    <br>
-    <label for="fpassword">Password:</label>
-    <input type="password" name="password" required>
-    <br>
-    <label for="fpassword">Repeat password:</label>
-    <input type="password" name="password_repeat" required>
-    <br>
-    <button type="submit" class="btn btn-danger mb-2">Register</button>
     </form>
 
 {% endblock %}
