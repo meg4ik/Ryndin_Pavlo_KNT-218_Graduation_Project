@@ -5,7 +5,6 @@ from flask import flash, make_response, redirect, request, url_for
 from flask_restful import Resource
 from src import app
 from src.database.models import User
-from src.token import get_user_by_token
 
 class Login(Resource):
     def get(self):
@@ -26,7 +25,6 @@ class Login(Resource):
             return redirect(url_for('main'))
         #make csrf code by jwt algorithm
         hour = 168 if auth.get('remember') else 1
-        print(hour)
         token = jwt.encode(
             {
                 "user_id": user.uuid,

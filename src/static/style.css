@@ -19,3 +19,16 @@ a {
   margin: 20px;
   text-align: left;
 }
+
+.green_but {
+  margin-top: 30px;
+  color: white;
+  background-color: #14b80e;
+  border: none;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 17px;
+  font-weight: bold;
+  padding: 0 15px 0 15px;
+}

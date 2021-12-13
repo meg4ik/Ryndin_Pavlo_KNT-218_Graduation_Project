@@ -2,7 +2,7 @@ import jwt
 from src import app
 from flask import request
 from flask import flash, redirect, request, url_for
-from src.database.models import User
+from src.database.models import User, Role
 from functools import wraps
 
 def get_user_by_token():
@@ -37,3 +37,18 @@ def token_required(func):
             return redirect(url_for('login'))
         return func(self, *args, **kwargs)
     return wrapper
+    
+def admin_manager_required(roles):
+    def dec(func):
+        @wraps(func)
+        def wrapper(self, *args, **kwargs):
+            #wrapper of current func
+
+            user = get_user_by_token()
+            role = Role.query.join(User).filter_by(username=user.username).first()
+            if not role in roles:
+                flash("You have no permission for this page!", category='danger')
+                return redirect(url_for('main'))
+            return func(self, *args, **kwargs)
+        return wrapper
+    return dec

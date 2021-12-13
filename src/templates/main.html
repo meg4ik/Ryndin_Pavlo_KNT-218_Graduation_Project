@@ -10,6 +10,11 @@
         <form action="{{ url_for('main') }}">
             <input type="search" name="search">
         </form>
+        {% if user_code and user_code !=1 %}
+        <form action="">
+            <button type="submit" class="green_but">Add Game</button>
+         </form>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
