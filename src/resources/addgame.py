@@ -4,17 +4,18 @@ from src import app, db
 from src.database.models import User
 from src.token import get_user_by_token, token_required, admin_manager_required
 
-@admin_manager_required
-@token_required
-class AddGame(Resource):
 
+class AddGame(Resource):
+    #@admin_manager_required
+    @token_required
     def get(self):
         try:
-            get_user_by_token()
+            user = get_user_by_token()
         except:
-            return make_response(render_template("register.html", nav=True), 200)
-        flash('You already authorized', category='warning')
-        return redirect(url_for('main'))
+            # return page with no user session
+            return make_response(render_template("main.html",), 200)
+        return make_response(render_template("addgame.html",user=user), 200)
         
     def post(self):
-        pass
+        name = request.form.get('name')
+        description = request.form.get('description')

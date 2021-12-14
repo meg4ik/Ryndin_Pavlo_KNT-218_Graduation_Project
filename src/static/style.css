@@ -32,3 +32,11 @@ a {
   font-weight: bold;
   padding: 0 15px 0 15px;
 }
+
+.links {
+  text-decoration: none;
+}
+.links:hover{
+  text-decoration: none;
+  color: white;
+}

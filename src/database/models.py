@@ -2,6 +2,16 @@ import uuid
 from flask_bcrypt import check_password_hash, generate_password_hash
 from src import db
 
+class UserGame(db.Model):
+    __tablename__ = 'user_game'
+    user_id = db.Column(db.ForeignKey('user.id'), primary_key=True)
+    game_id = db.Column(db.ForeignKey('game.id'), primary_key=True)
+
+class GameGenreSubgenre(db.Model):
+    __tablename__ = 'game_genre_subgenre'
+    genre_subgenre_id = db.Column(db.ForeignKey('genre_subgenre.id'), primary_key=True)
+    game_id = db.Column(db.ForeignKey('game.id'), primary_key=True)
+
 class Role(db.Model):
     """
     Role model
@@ -31,6 +41,8 @@ class User(db.Model):
     uuid = db.Column(db.String(36), unique=True)
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'), nullable=False)
 
+    user_game_to = db.relationship("UserGame", backref='user',lazy=True)
+
     def __init__(self, username, name, surname, email_address, password, code):
         self.username = username
         self.name = name
@@ -42,15 +54,6 @@ class User(db.Model):
         role = db.session.query(Role).filter(Role.code == code).first()
         self.role_id = role.id
 
-    # def __init__(self, title):
-    #     self.title = title
-    #     if title == "Admin":
-    #         self.code = 3
-    #     elif title == "Manager":
-    #         self.code = 2
-    #     else:
-    #         self.code = 1
-
     def __repr__(self):
         return f'User({self.surname}, {self.name})'
 
@@ -61,35 +64,65 @@ class User(db.Model):
         """
         return check_password_hash(self.password, attempted_password)
 
-    def save_to_db(self):
-        """
-        add and save user obj
-        """
-        db.session.add(self)
-        db.session.commit()
-        db.session.close()
+class Game(db.Model):
+    """
+    Game model
+    """
+    __tablename__ = 'game'
 
-# class Project(db.Model):
-#     """
-#     Project model
-#     """
-#     __tablename__ = 'project'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(40), nullable=False, unique=True)
+    description = db.Column(db.String(300), nullable=False)
+    uuid = db.Column(db.String(36), unique=True)
+    is_visible = db.Column(db.Boolean, default = True)
+    price = db.Column(db.Integer, nullable=False)
 
-#     id = db.Column(db.Integer, primary_key=True)
-#     title = db.Column(db.String(40), nullable=False, unique=True)
-#     description = db.Column(db.String(300), nullable=False)
-#     uuid = db.Column(db.String(36), unique=True)
-#     user_department_role_to = db.relationship("UserProjectRole",backref='department',lazy=True)
+    user_game_to = db.relationship("UserGame", backref='game',lazy=True)
 
-#     def __init__(self, title, description):
-#         self.title = title
-#         self.description = description
-#         self.uuid = str(uuid.uuid4())
+    genre_subgenre_to = db.relationship("GameGenreSubgenre", backref='game', lazy=True)
 
-#     def __repr__(self):
-#         return f'Project({self.title})'
+    def __init__(self, title, description):
+        self.title = title
+        self.description = description
+        self.uuid = str(uuid.uuid4())
 
-#     def save_to_db(self):
-#         db.session.add(self)
-#         db.session.commit()
-#         db.session.close()
+    def __repr__(self):
+        return f'Project({self.title})'
+
+
+class GenreSubgenre(db.Model):
+    """
+    GenreSubgenre model
+    """
+    __tablename__ = 'genre_subgenre'
+    id = db.Column(db.Integer, primary_key=True)
+    genre_id = db.Column(db.Integer, db.ForeignKey("genre.id"), nullable=True)
+    subgenre_id = db.Column(db.Integer, db.ForeignKey("subgenre.id"), nullable=True)
+
+    genre_subgenre_to = db.relationship("GameGenreSubgenre", backref='game', lazy=True)
+
+    __table_args__ = (db.UniqueConstraint(genre_id, subgenre_id),)
+
+class Genre(db.Model):
+    """
+    Genre model
+    """
+    __tablename__ = 'genre'
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(40), nullable=False, unique=True)
+
+    def __repr__(self):
+        return f'Genre({self.title})'
+
+class Subgenre(db.Model):
+    """
+    Genre model
+    """
+    __tablename__ = 'subgenre'
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(40), nullable=False, unique=True)
+
+    def __repr__(self):
+        return f'Subgenre({self.title})'
