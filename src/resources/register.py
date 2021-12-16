@@ -56,16 +56,21 @@ class Register(Resource):
                     break
             return redirect(url_for('register'))
         else:
-            u = User(
-                username=new_username,
-                name=new_name,
-                surname=new_surname,
-                email_address=new_email,
-                password=new_password,
-                code = 1
-            )
-            db.session.add(u)
-            db.session.commit()
-            db.session.close()
-            flash("User has been successfully created",category='success')
-            return redirect(url_for('main'))
+            try:
+                u = User(
+                    username=new_username,
+                    name=new_name,
+                    surname=new_surname,
+                    email_address=new_email,
+                    password=new_password,
+                    code = 1
+                )
+                db.session.add(u)
+                db.session.commit()
+                db.session.close()
+            except Exception as e:
+                flash("Something went wrong",category='danger')
+                return redirect(url_for('register'))
+            else:
+                flash("User has been successfully created",category='success')
+                return redirect(url_for('main'))

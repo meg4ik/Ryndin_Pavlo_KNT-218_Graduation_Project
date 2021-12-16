@@ -99,7 +99,7 @@ class GenreSubgenre(db.Model):
     genre_id = db.Column(db.Integer, db.ForeignKey("genre.id"), nullable=True)
     subgenre_id = db.Column(db.Integer, db.ForeignKey("subgenre.id"), nullable=True)
 
-    genre_subgenre_to = db.relationship("GameGenreSubgenre", backref='game', lazy=True)
+    genre_subgenre_to = db.relationship("GameGenreSubgenre", backref='genre_subgenre', lazy=True)
 
     __table_args__ = (db.UniqueConstraint(genre_id, subgenre_id),)
 

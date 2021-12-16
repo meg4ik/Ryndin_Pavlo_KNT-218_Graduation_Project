@@ -38,7 +38,7 @@ def token_required(func):
         return func(self, *args, **kwargs)
     return wrapper
     
-def admin_manager_required(roles):
+def role_handler(roles):
     def dec(func):
         @wraps(func)
         def wrapper(self, *args, **kwargs):
@@ -46,7 +46,7 @@ def admin_manager_required(roles):
 
             user = get_user_by_token()
             role = Role.query.join(User).filter_by(username=user.username).first()
-            if not role in roles:
+            if not role.code in roles:
                 flash("You have no permission for this page!", category='danger')
                 return redirect(url_for('main'))
             return func(self, *args, **kwargs)
