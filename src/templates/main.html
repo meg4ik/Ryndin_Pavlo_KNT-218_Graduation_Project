@@ -7,12 +7,32 @@
     <div class="col-2"><i class="fa fa-plus" aria-hidden="true"></i>Add genre</div>
     <div class="col-8"></div>
     <div class="col-2">
-        <form action="">
+        <form action="{{ url_for('main') }}">
             <input type="search" name="search">
         </form>
         {% if user_code and user_code !=1 %}
         <a class="green_but links" href="{{ url_for('addgame') }}">Add Game</a>
         {% endif %}
+    </div>
+    <div class="overflow-auto container scrollChat mt-4">
+        <div class="row row-cols-1 row-cols-md-3 g-4" style="margin-right: -15px;">
+          {% for i in games.keys() %}
+          <div class="col mb-5 mb-1">
+            <div class="card bg-transparent border-0">
+              <img src="https://image.api.playstation.com/vulcan/img/rnd/202009/2913/09xDToHiETDsJxINSzIVOQ4t.jpg" class="card-img-top" alt="image">
+                <div class="container mt-2">
+                  <div class="row">
+                    <div class="col"><h2 class="display-6">{{ i.price }}$</h2></div>
+                    <div class="col"></div>
+                    <div class="col"><a class="green_but_big links" href="">BUY</a></div>
+                  </div>
+                  <p class="m-0">{{ games[i] }}</p>
+                  <h5>{{ i.title }}</h5>
+                </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
     </div>
 </div>
 {% endblock %}

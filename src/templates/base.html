@@ -103,6 +103,20 @@
             </div>
          </div>
 
+         {% if not is_bottom %}
+         <div class="container mt-5 mb-2" style="background:transparent;">
+            <div class="row">
+               <div class="col-2">
+                  <a href="{{ url_for('main') }}" >
+                     <img src="../static/logo.png" alt="logo" width="60" height="30">
+                  </a>
+               </div>
+               <div class="col-8"></div>
+               <div class="col-2" style="font-size: 15px; color: #585858;"><p>Copyrights - 2022</p></div>
+            </div>
+         </div>
+         {% endif %}
+
    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

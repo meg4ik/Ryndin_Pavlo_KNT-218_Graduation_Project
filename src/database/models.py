@@ -11,6 +11,10 @@ class GameGenreSubgenre(db.Model):
     __tablename__ = 'game_genre_subgenre'
     genre_subgenre_id = db.Column(db.ForeignKey('genre_subgenre.id'), primary_key=True)
     game_id = db.Column(db.ForeignKey('game.id'), primary_key=True)
+    
+    def __init__(self, genre_subgenre_id, game_id):
+        self.genre_subgenre_id = genre_subgenre_id
+        self.game_id = game_id
 
 class Role(db.Model):
     """
@@ -81,9 +85,10 @@ class Game(db.Model):
 
     genre_subgenre_to = db.relationship("GameGenreSubgenre", backref='game', lazy=True)
 
-    def __init__(self, title, description):
+    def __init__(self, title, description, price):
         self.title = title
         self.description = description
+        self.price = price
         self.uuid = str(uuid.uuid4())
 
     def __repr__(self):
