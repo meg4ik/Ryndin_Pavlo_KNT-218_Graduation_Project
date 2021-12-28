@@ -4,7 +4,30 @@
 {% endblock %}
 {% block content %}
 <div class="row">
-    <div class="col-2"><i class="fa fa-plus" aria-hidden="true"></i>Add genre</div>
+    <div class="col-2">
+      <div id="GenresContent" style="display:none;">
+        <div class="popover-body">
+          <form action="{{ url_for('main') }}">
+            {% for i in dict_genre_subgenre.keys() %}
+            <div class="d-flex justify-content-start">
+              <div class="form-check m-1">
+                <input class="form-check-input {{ i.title }}" type="checkbox" name="Genre_{{ i.title }}" value="1" onClick="ckChangeSubgenre(this)">
+                <label class="form-check-label">{{ i.title }}</label>
+              </div>
+              {% for j in dict_genre_subgenre[i] %}
+              <div class="form-check ml-2">
+                <input class="form-check-input {{ i.title }}" type="checkbox" name="Subgenre_{{ j.title }}" value="1" onClick="ckChangeGenre(this)">
+                <label class="form-check-label">{{ j.title }}</label>
+              </div>
+              {% endfor %}
+            </div>
+            {% endfor %}
+            <button class="btn btn-success mt-2">apply</button>
+          </form>
+        </div>
+      </div>
+      <button type="button" data-toggle="popover" data-placement="bottom" data-html='true' class="btn btn-link nav-link" style="color: white;" data-popover-content="#GenresContent"><i class="fa fa-plus" aria-hidden="true"></i>Add genre</button>
+    </div>
     <div class="col-8"></div>
     <div class="col-2">
         <form action="{{ url_for('main') }}">

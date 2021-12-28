@@ -56,3 +56,8 @@ a {
   height:900px;
   width: 100%;
 }
+
+.popover{
+  max-width: 100%;
+  background-color:rgb(212, 212, 212);
+}
