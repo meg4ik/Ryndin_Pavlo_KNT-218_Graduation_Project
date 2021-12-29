@@ -8,7 +8,28 @@ class Main(Resource):
 
     def get(self):
         try:
-            games = db.session.query(Game).all()
+
+            games = set()
+            content = request.args.to_dict()
+            for i in content:
+                if content[i] == "Genre":
+                    curr_games = db.session.query(Game).join(GameGenreSubgenre).join(GenreSubgenre).join(Genre).filter_by(title=i[6:]).all()
+                    if isinstance(curr_games, list):
+                        for j in curr_games:
+                            games.add(j)
+                    
+                elif content[i] == "Subgenre":
+                    curr_games = db.session.query(Game).join(GameGenreSubgenre).join(GenreSubgenre).join(Subgenre).filter_by(title=i[9:]).first()
+                    if isinstance(curr_games, list):
+                        for j in curr_games:
+                            games.add(j)
+            if not games:
+                games = db.session.query(Game).all()
+                search = request.args.get('search')
+
+                if search:
+                    games = db.session.query(Game).filter(Game.title.contains(search)).all()
+
             game_genre = {}
             for i in games:
                 gen_sub = db.session.query(Genre).join(GenreSubgenre).join(GameGenreSubgenre).filter_by(game_id=i.id).all()
@@ -24,10 +45,11 @@ class Main(Resource):
                 subgenres =  db.session.query(Subgenre).join(GenreSubgenre).filter_by(genre_id = i.id).all()
                 dict_genre_subgenre[i] = list(map(lambda x: x ,subgenres))
                 
-        except:
+        except Exception as e:
+            print(e)
             # return page with no games
             flash('Something went wrong!', category='warning')
-            return make_response(render_template("main.html",games = {}, dict_genre_subgenre = dict_genre_subgenre), 200)
+            return make_response(render_template("main.html",games = {}, dict_genre_subgenre = {}), 200)
         try:
             user = get_user_by_token()
         except:

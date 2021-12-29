@@ -11,12 +11,12 @@
             {% for i in dict_genre_subgenre.keys() %}
             <div class="d-flex justify-content-start">
               <div class="form-check m-1">
-                <input class="form-check-input {{ i.title }}" type="checkbox" name="Genre_{{ i.title }}" value="1" onClick="ckChangeSubgenre(this)">
+                <input class="form-check-input {{ i.title }}" type="checkbox" name="Genre_{{ i.title }}" value="Genre" onClick="ckChangeSubgenre(this)">
                 <label class="form-check-label">{{ i.title }}</label>
               </div>
               {% for j in dict_genre_subgenre[i] %}
               <div class="form-check ml-2">
-                <input class="form-check-input {{ i.title }}" type="checkbox" name="Subgenre_{{ j.title }}" value="1" onClick="ckChangeGenre(this)">
+                <input class="form-check-input {{ i.title }}" type="checkbox" name="Subgenre_{{ j.title }}" value="Subgenre" onClick="ckChangeGenre(this)">
                 <label class="form-check-label">{{ j.title }}</label>
               </div>
               {% endfor %}
@@ -31,7 +31,7 @@
     <div class="col-8"></div>
     <div class="col-2">
         <form action="{{ url_for('main') }}">
-            <input type="search" name="search">
+            <input type="search" name="search" value="{{ request.args.get('search', '') }}">
         </form>
         {% if user_code and user_code !=1 %}
         <a class="green_but links" href="{{ url_for('addgame') }}">Add Game</a>
