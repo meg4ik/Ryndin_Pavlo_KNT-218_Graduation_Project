@@ -5,6 +5,9 @@ from src.resources.main import Main
 from src.resources.register import Register
 from src.resources.login import Login, Logout
 from src.resources.addgame import AddGame
+from src.resources.game import Game
+from src.resources.buygame import BuyGame
+from src.resources.carts import Carts
 
 
 #
@@ -17,13 +20,9 @@ api.add_resource(Register, '/register', strict_slashes=False)
 api.add_resource(Login, '/login', strict_slashes=False)
 api.add_resource(Logout, '/logout', strict_slashes=False)
 api.add_resource(AddGame, '/addgame', strict_slashes=False)
-
-# api.add_resource(Projects, '/projects', strict_slashes=False)
-# api.add_resource(Project, '/project/<uuid>', strict_slashes=False)
-# api.add_resource(User, '/user/<uuid>', strict_slashes=False)
-# api.add_resource(UserProjectAdd, '/projectadd/<uuid>', strict_slashes=False)
-# api.add_resource(Main, '/chats', strict_slashes=False)
-# api.add_resource(Main, '/profile', strict_slashes=False)
+api.add_resource(Game, '/game/<uuid>', strict_slashes=False)
+api.add_resource(BuyGame, '/buygame', strict_slashes=False)
+api.add_resource(Carts, '/carts', strict_slashes=False)
 
 # handling of 404 page error
 @app.errorhandler(404)

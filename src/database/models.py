@@ -1,11 +1,13 @@
 import uuid
 from flask_bcrypt import check_password_hash, generate_password_hash
 from src import db
+import datetime
 
 class UserGame(db.Model):
     __tablename__ = 'user_game'
     user_id = db.Column(db.ForeignKey('user.id'), primary_key=True)
     game_id = db.Column(db.ForeignKey('game.id'), primary_key=True)
+    count = db.Column(db.Integer, default=1)
 
 class GameGenreSubgenre(db.Model):
     __tablename__ = 'game_genre_subgenre'
@@ -15,6 +17,24 @@ class GameGenreSubgenre(db.Model):
     def __init__(self, genre_subgenre_id, game_id):
         self.genre_subgenre_id = genre_subgenre_id
         self.game_id = game_id
+
+class Comment(db.Model):
+    __tablename__ = 'comment'
+
+    id = db.Column(db.Integer, primary_key=True)
+    uuid = db.Column(db.String(36), unique=True)
+    text = db.Column(db.String(600), nullable=False)
+    created_date = db.Column(db.DateTime, default=datetime.datetime.utcnow, nullable=False)
+    reply_to_message_id = db.Column(db.Integer, default=None)
+    user_id_from = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    game_id_from = db.Column(db.Integer, db.ForeignKey("game.id"), nullable=False)
+
+    def __init__(self, text, reply_to_message_id, user_id_from, game_id_from):
+        self.uuid = str(uuid.uuid4())
+        self.text = text
+        self.reply_to_message_id = reply_to_message_id
+        self.user_id_from = user_id_from
+        self.game_id_from = game_id_from
 
 class Role(db.Model):
     """

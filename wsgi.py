@@ -2,7 +2,6 @@ from src import app
 
 # TODO
 # загрузка и выгрузка изображений используя E3
-# создание корзины с покупками
 
 
 #app starting here

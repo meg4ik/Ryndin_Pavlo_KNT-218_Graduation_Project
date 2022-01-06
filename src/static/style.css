@@ -44,6 +44,30 @@ a {
   padding: 0 15px 0 15px;
 }
 
+.green_but_big2 {
+  color: white;
+  background-color: #14b80e;
+  border: none;
+  text-align: center;
+  text-decoration: none;
+  font-size: 25px;
+  font-weight: bold;
+  padding: 7px 45px 7px 45px;
+}
+
+.green_proceed {
+  margin: 10px 0px 10px 20px;
+  color: white;
+  background-color: #14b80e;
+  border: none;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 17px;
+  font-weight: bold;
+  padding: 0 15px 0 15px;
+}
+
 .links {
   text-decoration: none;
 }
@@ -60,4 +84,37 @@ a {
 .popover{
   max-width: 100%;
   background-color:rgb(212, 212, 212);
+}
+
+figure {
+  overflow: hidden;
+  height: 400px;
+}
+
+.game_genres{
+  background-color: #4182b8;
+  margin-right: 10px;
+  padding: 5px 10px 5px 10px;
+  border-radius: 25px;
+  font-size: 15px;
+}
+
+.textarea_black{
+  background-color:rgb(68, 68, 68);
+  color: white;
+}
+
+.game_counter{
+  background-color: #14b80e;
+  padding: 0px 60px 0px 60px;
+  margin: 30px 0px 0px 0px;
+  border-radius: 25px;
+}
+
+.dec_game_counter{
+  border: none; 
+  outline: none;
+  background-color: #14b80e;
+  font-size: 50px;
+  color: white;
 }

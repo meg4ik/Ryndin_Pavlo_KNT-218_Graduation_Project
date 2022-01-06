@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}
+    {{ game.title }}
+{% endblock %}
+{% block content %}
+<div class="container mr-1 ml-1">
+    <figure>
+        <img src="https://store-images.s-microsoft.com/image/apps.45487.71475369522469696.112bf975-f54d-4d34-b915-6ce0f433ad0e.ecce8e46-6836-4e73-8b90-12bf7eb940f9?q=90&w=480&h=270" width="100%" alt="image">
+    </figure>
+    <h1 class="mt-4">{{ game.title }}</h1>
+    <div class="row">
+        <div class="col-2"><h3>$ {{ game.price }}</h3></div>
+        <div class="col-8"></div>
+        <div class="col-2">
+            <form method="POST" action="{{ url_for('buygame') }}">
+                <input type="hidden" name="game" value="{{ game.uuid }}" />
+                <input class="green_but_big2 links" value="BUY" type="submit"></input>
+            </form>
+        </div>
+    </div>
+    <hr align="center" width="100%" size="2" color="white" />
+    <div class="d-flex justify-content-start">
+        {% for i in dict_genre_subgenre.keys() %}
+            {% if dict_genre_subgenre[i]|length == 0 %}
+                <p class="game_genres">{{ i.title }}</p>
+            {% else %}
+                {% for j in dict_genre_subgenre[i] %}
+                <p class="game_genres">{{ i.title }} - {{ j.title }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </div>
+    <p style="margin: 15px 0 70px;">{{ game.description }}</p>
+
+    {% for i in user_comment %}
+        <div class="container mb-4">
+            <p style="color: rgb(167, 167, 167); font-size: 10px; margin-bottom: 3px;">{{ i[2] }}</p>
+            <h6 class="mb-2" style="font-size: 18px;">{{ i[0].surname }} {{ i[0].name }}</h6>
+            <p style="color: rgb(179, 179, 179);">{{ i[1].text }}</p>
+            {% if user1 %}
+            <button class="btn btn-link p-0" name="i" style="color: rgb(35, 96, 150); text-decoration: underline;" onClick="ReplyComment(this)">Reply</button>
+            <div id="request_form">
+                <form role="form" autocomplete="off" method="POST">
+                    <textarea class="form-control input-lg textarea_black" name="comment" placeholder="Reply:" rows="2" required></textarea>
+                    <input type="hidden" name="reply_to_message_uuid" value="{{ i[1].uuid }}" />
+                    <input class="btn btn-success mt-2" value="Submit" type="submit"></input>
+                </form>
+              </div>
+              {% endif %}
+            
+        </div>
+    {% endfor %}
+
+    {% if user %}
+    <form method="post" class="mt-5 mb-4">
+        <textarea class="form-control input-lg textarea_black" name="comment" placeholder="Leave your comment:" rows="2" required></textarea>
+        <input class="btn btn-success mt-2" value="Submit" type="submit"></input>
+    </form>
+    {% endif %}
+</div>
+{% endblock %}

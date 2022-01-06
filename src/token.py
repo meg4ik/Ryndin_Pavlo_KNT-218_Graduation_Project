@@ -2,7 +2,7 @@ import jwt
 from src import app
 from flask import request
 from flask import flash, redirect, request, url_for
-from src.database.models import User, Role
+from src.database.models import User, Role, Game
 from functools import wraps
 
 def get_user_by_token():
@@ -55,3 +55,22 @@ def role_handler(roles):
             return func(self, *args, **kwargs)
         return wrapper
     return dec
+
+def get_games():
+    g_obj_list = []
+    gamelist = request.cookies.get('gamelist')
+    if not gamelist:
+        return g_obj_list
+    m = gamelist.split('&')
+    
+    for i in m:
+        game = Game.query.filter_by(uuid=i).first()
+        if game:
+            f = True
+            for j in g_obj_list:
+                if j==game:
+                    f=False
+                    break
+            if f:
+                g_obj_list.append(game)
+    return g_obj_list

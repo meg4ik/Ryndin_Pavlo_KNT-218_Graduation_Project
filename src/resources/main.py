@@ -11,19 +11,22 @@ class Main(Resource):
 
             games = set()
             content = request.args.to_dict()
+            is_genre_game = True
             for i in content:
                 if content[i] == "Genre":
                     curr_games = db.session.query(Game).join(GameGenreSubgenre).join(GenreSubgenre).join(Genre).filter_by(title=i[6:]).all()
                     if isinstance(curr_games, list):
                         for j in curr_games:
                             games.add(j)
+                        if len(curr_games)==0:
+                            is_genre_game = False
                     
                 elif content[i] == "Subgenre":
                     curr_games = db.session.query(Game).join(GameGenreSubgenre).join(GenreSubgenre).join(Subgenre).filter_by(title=i[9:]).first()
                     if isinstance(curr_games, list):
                         for j in curr_games:
                             games.add(j)
-            if not games:
+            if not games and is_genre_game:
                 games = db.session.query(Game).all()
                 search = request.args.get('search')
 
@@ -45,8 +48,7 @@ class Main(Resource):
                 subgenres =  db.session.query(Subgenre).join(GenreSubgenre).filter_by(genre_id = i.id).all()
                 dict_genre_subgenre[i] = list(map(lambda x: x ,subgenres))
                 
-        except Exception as e:
-            print(e)
+        except:
             # return page with no games
             flash('Something went wrong!', category='warning')
             return make_response(render_template("main.html",games = {}, dict_genre_subgenre = {}), 200)

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}
+    Carts
+{% endblock %}
+{% block content %}
+<div class="container mr-1 ml-1">
+    <div class="row">
+        <div class="col-2"><p style="font-size: 30px;">Your cart</p></div>
+        <div class="col-6"></div>
+        <div class="col-4">
+            <div class="d-flex justify-content-start">
+                <h3 style="font-size: 35px;">Total:</h3>
+                <a class="green_proceed links" href="{{ url_for('main') }}">Proceed</a>
+            </div>
+        </div>
+    </div>
+        <div class="overflow-auto container scrollChat mt-4">
+            {% for i in games %}
+            <div class="container mb-3" style="width: 85%; height: 200px; border: 3px solid black;">
+                <div class="d-flex justify-content-start mt-3 mb-3">
+                    <img src="https://image.api.playstation.com/vulcan/img/rnd/202009/2913/09xDToHiETDsJxINSzIVOQ4t.jpg" alt="image" style="height: 150px;">
+                    <div class="container m-4">
+                        <p style="font-size: 20px;">{{ i.title }}</p>
+                        <h3>${{ i.price }}</h3>
+                    </div>
+                    <div class="container">
+                        <div class="game_counter">
+                            <div class="d-flex justify-content-start">
+                                <input type="button" id="buttonCountMinus{{ i.title }}" value="-" class="dec_game_counter" onClick="MinusPrice(this)">
+                                <div id="buttonCountNumber{{ i.title }}" class="mt-3" style="font-size: 30px;">1</div>
+                                <input type="button" id="buttonCountPlus{{ i.title }}" value="+" class="dec_game_counter" onClick="PlusPrice(this)">
+                            </div>
+                    </div>
+                    </div>
+                    <div class="container m-4">
+                        <div id="calculation">150</div>
+                    </div>
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+</div>
+{% endblock %}
