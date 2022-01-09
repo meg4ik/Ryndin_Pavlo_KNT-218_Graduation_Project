@@ -40,20 +40,44 @@
     <div class="overflow-auto container scrollChat mt-4">
         <div class="row row-cols-1 row-cols-md-3 g-4" style="margin-right: -15px;">
           {% for i in games.keys() %}
-          <div class="col mb-5 mb-1">
-            <div class="card bg-transparent border-0">
-              <img src="https://image.api.playstation.com/vulcan/img/rnd/202009/2913/09xDToHiETDsJxINSzIVOQ4t.jpg" class="card-img-top" alt="image">
-                <div class="container mt-2">
-                  <div class="row">
-                    <div class="col"><h2 class="display-6">{{ i.price }}$</h2></div>
-                    <div class="col"></div>
-                    <div class="col"><a class="green_but_big links" href="{{ url_for('game', uuid=i.uuid) }}">BUY</a></div>
+            {% if i.is_visible and not i.is_delete %}
+            <div class="col mb-5 mb-1">
+              {% if user_code and user_code !=1 %}
+              <div class="card bg-transparent border-0 holder">
+                <img src="https://image.api.playstation.com/vulcan/img/rnd/202009/2913/09xDToHiETDsJxINSzIVOQ4t.jpg" class="card-img-top" alt="image">
+                  <div class="container mt-2">
+                    <div class="row">
+                      <div class="col"><h2 class="display-6">{{ i.price }}$</h2></div>
+                      <div class="col"></div>
+                      <div class="col"><a class="green_but_big links" href="{{ url_for('game', uuid=i.uuid) }}">BUY</a></div>
+                    </div>
+                    <p class="m-0">{{ games[i] }}</p>
+                    <h5>{{ i.title }}</h5>
                   </div>
-                  <p class="m-0">{{ games[i] }}</p>
-                  <h5>{{ i.title }}</h5>
-                </div>
+                  <div class="manage_block">
+                    <a href="{{ url_for('main') }}" class="btn btn-link nav-link" style="color: black; font-size: 22px; margin-top: 120px;" ><i class="fa fa-edit" aria-hidden="true"></i>Edit Game</a>
+                  <form action="{{ url_for('addgame') }}" class="ajax_del_game" style="margin-left: 60px;">
+                    <input type="hidden" name="del_game_uuid" value="{{ i.uuid }}" />
+                    <button type="submit" class="btn btn-link nav-link" style="color: black;font-size: 20px; font-size: 22px;"><i class="fa fa-trash" aria-hidden="true"></i>Delete Game</button>
+                  </form>
+                  </div>
+              </div>
+              {% else %}
+              <div class="card bg-transparent border-0">
+                <img src="https://image.api.playstation.com/vulcan/img/rnd/202009/2913/09xDToHiETDsJxINSzIVOQ4t.jpg" class="card-img-top" alt="image">
+                  <div class="container mt-2">
+                    <div class="row">
+                      <div class="col"><h2 class="display-6">{{ i.price }}$</h2></div>
+                      <div class="col"></div>
+                      <div class="col"><a class="green_but_big links" href="{{ url_for('game', uuid=i.uuid) }}">BUY</a></div>
+                    </div>
+                    <p class="m-0">{{ games[i] }}</p>
+                    <h5>{{ i.title }}</h5>
+                  </div>
+              </div>
+              {% endif %}
             </div>
-          </div>
+            {% endif %}
           {% endfor %}
         </div>
     </div>

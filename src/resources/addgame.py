@@ -1,4 +1,4 @@
-from flask import make_response, render_template, request, flash, redirect, url_for
+from flask import make_response, render_template, request, flash, redirect, url_for, abort
 from flask_restful import Resource
 from src import app, db
 from src.database.models import GameGenreSubgenre, User, Genre, GenreSubgenre, Subgenre, Game
@@ -80,3 +80,22 @@ class AddGame(Resource):
                     continue
             db.session.close()
             return redirect(url_for('main'))
+            
+    @role_handler(RESOURCE_ROLES)
+    @token_required
+    def delete(self):
+        game_uuid = request.form.get('del_game_uuid')
+        game_obj = db.session.query(Game).filter_by(uuid = game_uuid).first()
+        if not game_uuid or not game_obj:
+                #return main page
+                flash("Not such a game",category='danger')
+                return redirect(url_for('main'))
+        try:
+            game_obj.is_delete = True
+            db.session.commit()
+            db.session.close()
+        except:
+            flash('Something went wrong!', category='warning')
+        else:
+            flash("Game has been successfully deleted",category='success')
+        return redirect(url_for('main'))

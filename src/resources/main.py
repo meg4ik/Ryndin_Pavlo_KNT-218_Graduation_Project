@@ -1,6 +1,6 @@
-from flask import make_response, render_template, request, flash
+from flask import make_response, render_template, request, flash, redirect, url_for
 from flask_restful import Resource
-from src.token import get_user_by_token, get_games
+from src.token import get_user_by_token, get_games, token_required
 from src.database.models import User, Role, Game, GenreSubgenre, GameGenreSubgenre, Genre, Subgenre
 from src import db
 
@@ -8,7 +8,6 @@ class Main(Resource):
 
     def get(self):
         try:
-
             games = set()
             content = request.args.to_dict()
             is_genre_game = True

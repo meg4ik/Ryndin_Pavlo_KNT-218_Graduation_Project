@@ -68,3 +68,15 @@ function MinusPrice(ckType){
     total.innerHTML="Total: $"+(parseInt(total.innerHTML.slice(8))-parseInt(price.innerHTML.slice(1)));
   }
 }
+
+$(function() {
+  $('form.ajax_del_game').submit(function(e) {
+    var $form = $(this);
+    $.ajax({
+      type: 'DELETE',
+      url: $form.attr('action'),
+      data: $form.serialize()
+    })
+    e.preventDefault();
+  });
+});

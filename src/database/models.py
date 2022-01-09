@@ -99,17 +99,20 @@ class Game(db.Model):
     description = db.Column(db.String(300), nullable=False)
     uuid = db.Column(db.String(36), unique=True)
     is_visible = db.Column(db.Boolean, default = True)
+    is_delete = db.Column(db.Boolean, default = False)
     price = db.Column(db.Integer, nullable=False)
 
     user_game_to = db.relationship("UserGame", backref='game',lazy=True)
 
     genre_subgenre_to = db.relationship("GameGenreSubgenre", backref='game', lazy=True)
 
-    def __init__(self, title, description, price):
+    def __init__(self, title, description, price, is_visible=True, is_delete=False):
         self.title = title
         self.description = description
         self.price = price
         self.uuid = str(uuid.uuid4())
+        self.is_visible = is_visible
+        self.is_delete = is_delete
 
     def __repr__(self):
         return f'Project({self.title})'
