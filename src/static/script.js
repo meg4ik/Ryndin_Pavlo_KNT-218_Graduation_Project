@@ -37,8 +37,16 @@ function PlusPrice(ckType){
 
   var bcn = document.getElementById("buttonCountNumber"+bcn_second_part)
   let countPlus = bcn.innerHTML;
+
+  var calc = document.getElementById("calculation"+bcn_second_part)
+  var price = document.getElementById("price"+bcn_second_part)
+
+  var total = document.getElementById("totalsum")
+ 
   if(+countPlus <= 4){
     bcn.innerHTML++;
+    calc.innerHTML="$"+(parseInt(calc.innerHTML.slice(1))+parseInt(price.innerHTML.slice(1)));
+    total.innerHTML="Total: $"+(parseInt(total.innerHTML.slice(8))+parseInt(price.innerHTML.slice(1)));
   }
 }
 
@@ -47,8 +55,16 @@ function MinusPrice(ckType){
   var bcn_second_part = b_id.id.slice(16)
 
   var bcn = document.getElementById("buttonCountNumber"+bcn_second_part)
-  let countPlus = bcn.innerHTML;
-  if(+countPlus > 1){
+  let countMinus = bcn.innerHTML;
+
+  var calc = document.getElementById("calculation"+bcn_second_part)
+  var price = document.getElementById("price"+bcn_second_part)
+
+  var total = document.getElementById("totalsum")
+
+  if(+countMinus > 1){
     bcn.innerHTML--;
+    calc.innerHTML="$"+(parseInt(calc.innerHTML.slice(1))-parseInt(price.innerHTML.slice(1)));
+    total.innerHTML="Total: $"+(parseInt(total.innerHTML.slice(8))-parseInt(price.innerHTML.slice(1)));
   }
 }

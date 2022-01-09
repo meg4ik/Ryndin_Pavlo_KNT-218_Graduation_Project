@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}
+    Order
+{% endblock %}
+
+{% block content %}
+    <div class="container mr-1 ml-1">
+        <h3>Complete your order</h3>
+    </div>
+    <form class="form center-block" method="POST">
+      <div class="form-group">
+        <input type="text" name="name" class="form-control" placeholder="First Name" required>
+      </div>
+      <div class="form-group">
+        <input type="text" name="surname" class="form-control" placeholder="Last Name" required>
+      </div>
+      <div class="form-group">
+        <input type="email" name="email_address" class="form-control" placeholder="E-mail" required>
+      </div>
+      <div class="form-group">
+        <input type="tel" name="phone" class="form-control" placeholder="Phone (000-00-000)" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" required>
+      </div>
+      <div class="form-group">
+        <div class="d-flex justify-content-start">
+            <p>Payment type:</p>
+            <select name="payment" class="form-select form-select-lg mb-3 ml-2" aria-label="Payment_type">
+                <option value="card" selected>Card</option>
+                <option value="cash">Cash</option>
+              </select></div>
+          <div class="form-group">
+            <textarea class="form-control input-lg" name="comment" placeholder="Comments (optional)" rows="3"></textarea>
+          </div>
+      </div>
+
+      
+      <div class="form-group">
+        <button type="submit" class="btn btn-success btn-lg btn-block">Order</button>
+      </div>
+    </form>
+{% endblock %}

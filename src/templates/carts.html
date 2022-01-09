@@ -9,19 +9,20 @@
         <div class="col-6"></div>
         <div class="col-4">
             <div class="d-flex justify-content-start">
-                <h3 style="font-size: 35px;">Total:</h3>
-                <a class="green_proceed links" href="{{ url_for('main') }}">Proceed</a>
+                <h3 id="totalsum" style="font-size: 35px;">Total: ${{ total_price }}</h3>
+                <a class="green_proceed links" href="{{ url_for('order') }}">Proceed</a>
             </div>
         </div>
     </div>
+        {% if not games|length==0 %}
         <div class="overflow-auto container scrollChat mt-4">
             {% for i in games %}
             <div class="container mb-3" style="width: 85%; height: 200px; border: 3px solid black;">
                 <div class="d-flex justify-content-start mt-3 mb-3">
                     <img src="https://image.api.playstation.com/vulcan/img/rnd/202009/2913/09xDToHiETDsJxINSzIVOQ4t.jpg" alt="image" style="height: 150px;">
                     <div class="container m-4">
-                        <p style="font-size: 20px;">{{ i.title }}</p>
-                        <h3>${{ i.price }}</h3>
+                        <a style="text-decoration: none;" href="{{ url_for('game', uuid=i.uuid) }}"><p style="font-size: 20px;">{{ i.title }}</p></a>
+                        <h3 id="price{{ i.title }}">${{ i.price }}</h3>
                     </div>
                     <div class="container">
                         <div class="game_counter">
@@ -33,12 +34,19 @@
                     </div>
                     </div>
                     <div class="container m-4">
-                        <div id="calculation">150</div>
+                        <p style="font-size: 20px;">Total:</p>
+                        <h3 id="calculation{{ i.title }}">${{ i.price }}</h3>
                     </div>
-
+                    <form method="post">
+                        <input type="hidden" name="delete" value="{{ i.uuid }}" />
+                        <button type="submit" class="btn btn-link nav-link mt-5 p-0" style="color: white;font-size: 40px;"><i class="fa fa-times" aria-hidden="true"></i></button>
+                    </form>
                 </div>
             </div>
             {% endfor %}
         </div>
+        {% else %}
+        <h1>No game carts</h1>
+        {% endif %}
 </div>
 {% endblock %}

@@ -36,12 +36,24 @@
                <ul class="navbar-nav">
                   {% if not is_nav %}
                      {% if user %}
+                        <li class="nav-item mr-3">
+                           <a class="nav-link mt-1" href="" >{{ user.surname }} {{ user.name }}</a>
+                        </li>
                         <li class="nav-item">
-                           <a class="nav-link" href="" >{{ user.surname }} {{ user.name }}</a>
+                           <form action="{{ url_for('carts') }}" method="POST">
+                              <button type="submit" class="btn btn-link nav-link" style="color: white;font-size: 20px;"><i class="fa fa-shopping-cart" aria-hidden="true"></i></button>
+                           </form>
+                        </li>
+                        <li class="nav-item mr-3">
+                           {% if cart_count>0 %}
+                              <p class="mt-1">{{ cart_count }}</p>
+                           {% else %}
+                              <p class="mt-1"></p>
+                           {% endif %}
                         </li>
                         <li class="nav-item">
                            <form action="{{ url_for('logout') }}" method="POST">
-                              <input class="btn btn-primary" type="submit" name="Signout" value="Sign out">
+                              <button type="submit" class="btn btn-link nav-link" style="color: white;font-size: 20px;"><i class="fa fa-sign-out" aria-hidden="true"></i></button>
                            </form>
                         </li>
                      {% else %}

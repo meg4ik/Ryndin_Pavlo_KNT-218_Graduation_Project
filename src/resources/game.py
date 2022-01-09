@@ -1,6 +1,6 @@
 from flask import make_response, render_template, request, flash, redirect, url_for
 from flask_restful import Resource
-from src.token import get_user_by_token, token_required
+from src.token import get_user_by_token, token_required, get_games
 from src.database.models import User, Role, GenreSubgenre, GameGenreSubgenre, Genre, Subgenre, Comment
 from src.database.models import Game as GameModel
 from src import db
@@ -28,16 +28,16 @@ class Game(Resource):
                 user_comment_list.append(i)
                 user_comment_list.append(date)
                 user_comment.append(user_comment_list)
+            cart_count = len(get_games())
         except Exception as e:
-            print(e)
             flash('Something went wrong!', category='warning')
             return redirect(url_for('main'))
 
         try:
             user = get_user_by_token()
         except:
-            return make_response(render_template("game.html", dict_genre_subgenre = dict_genre_subgenre, game = game_obj, user_comment = user_comment), 200)
-        return make_response(render_template("game.html",user=user, game = game_obj, dict_genre_subgenre=dict_genre_subgenre, user_comment = user_comment), 200)
+            return make_response(render_template("game.html", dict_genre_subgenre = dict_genre_subgenre, game = game_obj, user_comment = user_comment, cart_count=cart_count), 200)
+        return make_response(render_template("game.html",user=user, game = game_obj, dict_genre_subgenre=dict_genre_subgenre, user_comment = user_comment,cart_count=cart_count), 200)
 
     @token_required
     def post(self, uuid):

@@ -1,6 +1,6 @@
 from flask import make_response, render_template, request, flash
 from flask_restful import Resource
-from src.token import get_user_by_token
+from src.token import get_user_by_token, get_games
 from src.database.models import User, Role, Game, GenreSubgenre, GameGenreSubgenre, Genre, Subgenre
 from src import db
 
@@ -47,6 +47,7 @@ class Main(Resource):
             for i in genres:
                 subgenres =  db.session.query(Subgenre).join(GenreSubgenre).filter_by(genre_id = i.id).all()
                 dict_genre_subgenre[i] = list(map(lambda x: x ,subgenres))
+            cart_count = len(get_games())
                 
         except:
             # return page with no games
@@ -60,4 +61,4 @@ class Main(Resource):
         # return page in user session
         role = Role.query.join(User).filter_by(username=user.username).first()
         
-        return make_response(render_template("main.html", user=user, user_code=role.code, games = game_genre, dict_genre_subgenre = dict_genre_subgenre), 202)
+        return make_response(render_template("main.html", user=user, user_code=role.code, games = game_genre, dict_genre_subgenre = dict_genre_subgenre, cart_count=cart_count), 202)

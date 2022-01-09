@@ -2,7 +2,7 @@ from flask import make_response, render_template, request, flash, redirect, url_
 from flask_restful import Resource
 from src import app, db
 from src.database.models import GameGenreSubgenre, User, Genre, GenreSubgenre, Subgenre, Game
-from src.token import get_user_by_token, token_required, role_handler
+from src.token import get_user_by_token, token_required, role_handler, get_games
 
 
 class AddGame(Resource):
@@ -21,7 +21,8 @@ class AddGame(Resource):
         for i in genres:
             subgenres =  db.session.query(Subgenre).join(GenreSubgenre).filter_by(genre_id = i.id).all()
             dict_genre_subgenre[i] = list(map(lambda x: x ,subgenres))
-        return make_response(render_template("addgame.html",user=user, dict_genre_subgenre = dict_genre_subgenre), 200)
+        cart_count = len(get_games())
+        return make_response(render_template("addgame.html",user=user, dict_genre_subgenre = dict_genre_subgenre, cart_count=cart_count), 200)
         
     @role_handler(RESOURCE_ROLES)
     @token_required
