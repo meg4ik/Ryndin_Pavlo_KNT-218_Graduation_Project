@@ -1,8 +1,6 @@
-from re import T
 from flask import make_response, request, flash, redirect, url_for
 from flask_restful import Resource
 from src.token import token_required
-from src import db
 
 class BuyGame(Resource):
     @token_required

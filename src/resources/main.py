@@ -36,10 +36,11 @@ class Main(Resource):
             for i in games:
                 gen_sub = db.session.query(Genre).join(GenreSubgenre).join(GameGenreSubgenre).filter_by(game_id=i.id).all()
                 genres = ""
-                if len(gen_sub) > 1:
-                    genres = "{} / {}".format(gen_sub[0].title, gen_sub[1].title)
-                else:
-                    genres = gen_sub[0].title
+                if gen_sub:
+                    if len(gen_sub) > 1:
+                        genres = "{} / {}".format(gen_sub[0].title, gen_sub[1].title)
+                    else:
+                        genres = gen_sub[0].title
                 game_genre[i] = genres
             dict_genre_subgenre = {}
             genres = db.session.query(Genre).all()
