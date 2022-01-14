@@ -7,7 +7,7 @@
     <h1 class="h3 mb-3 fw-normal">Add Game</h1>
   </div>
 
-    <form class="form col-md-12 center-block" method="POST">
+    <form class="form col-md-12 center-block" method="POST" enctype="multipart/form-data">
       <div class="form-group">
         <input type="text" name="name" class="form-control input-lg" placeholder="Name" required>
       </div>
@@ -16,6 +16,9 @@
       </div>
       <div class="form-group">
         <input class="form-control input-lg" type="number" name="price" placeholder="Price" min="0" required data-bind="value:replyNumber"/>
+      </div>
+      <div class="form-group">
+        <input type="file" name="img" accept="image/png, image/jpeg">
       </div>
       {% for i in dict_genre_subgenre.keys() %}
       <div class="d-flex justify-content-start">

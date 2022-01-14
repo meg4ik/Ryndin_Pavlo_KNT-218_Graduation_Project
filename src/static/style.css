@@ -106,9 +106,9 @@ figure {
 
 .game_counter{
   background-color: #14b80e;
-  padding: 0px 60px 0px 60px;
+  padding: 0px 40px 0px 40px;
   margin: 30px 0px 0px 0px;
-  border-radius: 25px;
+  border-radius: 60px;
 }
 
 .dec_game_counter{

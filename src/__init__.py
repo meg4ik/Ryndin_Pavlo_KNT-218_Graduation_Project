@@ -7,8 +7,10 @@ from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from simple_settings import settings
 from logging import FileHandler, WARNING
+import boto3
 
-from os import path
+
+from os import path, environ
 
 #
 # Setting and adding the required variables
@@ -34,6 +36,20 @@ api = Api(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
+try:
+    aws_client = boto3.client('s3', aws_access_key_id=environ["ACCESS_KEY_ID"].split('\'')[1],
+                                   aws_secret_access_key=environ["SECRET_ACCESS_KEY"].split('\'')[1])
+    f = True
+    for i in aws_client.list_buckets()['Buckets']:
+        if i["Name"] == "gamestorebucket":
+            f = False
+    if f:
+        raise Exception("No such a bucket!")
+except Exception as e:
+    print(e)
+
+
+
 
 # from src.database.admin_view import AdminIndexView
 # admin = Admin(app, index_view=AdminIndexView(), template_mode='bootstrap3')

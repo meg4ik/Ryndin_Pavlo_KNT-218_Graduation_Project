@@ -96,7 +96,7 @@ class Game(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(40), nullable=False, unique=True)
-    description = db.Column(db.String(300), nullable=False)
+    description = db.Column(db.String(1000), nullable=False)
     uuid = db.Column(db.String(36), unique=True)
     is_visible = db.Column(db.Boolean, default = True)
     is_delete = db.Column(db.Boolean, default = False)

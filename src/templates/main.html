@@ -44,14 +44,15 @@
               {% if user_code and user_code !=1 %}
               <div class="col mb-5 mb-1">
               <div class="card bg-transparent border-0 holder">
-                <img src="https://image.api.playstation.com/vulcan/img/rnd/202009/2913/09xDToHiETDsJxINSzIVOQ4t.jpg" class="card-img-top" alt="image">
+                <img src="{{ games[i][1] }}" class="card-img-top" alt="image">
+                
                   <div class="container mt-2">
                     <div class="row">
                       <div class="col"><h2 class="display-6">{{ i.price }}$</h2></div>
                       <div class="col"></div>
                       <div class="col"><a class="green_but_big links" href="{{ url_for('game', uuid=i.uuid) }}">BUY</a></div>
                     </div>
-                    <p class="m-0">{{ games[i] }}</p>
+                    <p class="m-0">{{ games[i][0] }}</p>
                     <h5>{{ i.title }}</h5>
                   </div>
                   <div class="manage_block">
@@ -67,14 +68,15 @@
               {% if i.is_visible%}
               <div class="col mb-5 mb-1">
               <div class="card bg-transparent border-0">
-                <img src="https://image.api.playstation.com/vulcan/img/rnd/202009/2913/09xDToHiETDsJxINSzIVOQ4t.jpg" class="card-img-top" alt="image">
+                
+                <img src="{{ games[i][1] }}" class="card-img-top" alt="image">
                   <div class="container mt-2">
                     <div class="row">
                       <div class="col"><h2 class="display-6">{{ i.price }}$</h2></div>
                       <div class="col"></div>
                       <div class="col"><a class="green_but_big links" href="{{ url_for('game', uuid=i.uuid) }}">BUY</a></div>
                     </div>
-                    <p class="m-0">{{ games[i] }}</p>
+                    <p class="m-0">{{ games[i][0] }}</p>
                     <h5>{{ i.title }}</h5>
                   </div>
               </div>

@@ -3,6 +3,7 @@ from flask_restful import Resource
 from src.token import token_required, role_handler, get_user_by_token, get_games
 from src.database.models import GameGenreSubgenre, User, Genre, GenreSubgenre, Subgenre, Game
 from src import db
+from src.aws_func import upload_img
 
 class EditGame(Resource):
     RESOURCE_ROLES = [2,3]
@@ -34,7 +35,7 @@ class EditGame(Resource):
             if len(title_to)<2 or len(title_to)>40:
                 to_flash.append("Name must be less than 40 characters")
             description_to = content["description"]
-            if len(description_to)<2 or len(description_to)>40:
+            if len(description_to)<2 or len(description_to)>1000:
                 to_flash.append("Description must be less than 300 characters")
             price_to = content["price"]
             if not price_to.isdecimal():
@@ -64,6 +65,12 @@ class EditGame(Resource):
             )
             db.session.commit()
             game = db.session.query(Game).filter_by(title = title_to).first()
+            try:
+                image = request.files['img']  # get file
+            except Exception as e:
+                print(e)
+            else:
+                upload_img(image,game.uuid)
             
             g = db.session.query(GameGenreSubgenre).filter_by(game_id = game.id).all()
             for i in g:

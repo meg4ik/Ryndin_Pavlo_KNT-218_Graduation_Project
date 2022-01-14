@@ -3,6 +3,9 @@ from flask_restful import Resource
 from src.token import get_user_by_token, get_games, token_required
 from src.database.models import User, Role, Game, GenreSubgenre, GameGenreSubgenre, Genre, Subgenre
 from src import db
+from io import BytesIO
+from src import aws_client
+import base64
 
 class Main(Resource):
 
@@ -35,13 +38,24 @@ class Main(Resource):
             game_genre = {}
             for i in games:
                 gen_sub = db.session.query(Genre).join(GenreSubgenre).join(GameGenreSubgenre).filter_by(game_id=i.id).all()
+                dop_data = []
                 genres = ""
                 if gen_sub:
                     if len(gen_sub) > 1:
                         genres = "{} / {}".format(gen_sub[0].title, gen_sub[1].title)
                     else:
                         genres = gen_sub[0].title
-                game_genre[i] = genres
+                dop_data.append(genres)
+
+                a_file = BytesIO()
+                aws_client.download_fileobj("gamestorebucket", i.uuid+".jpg", a_file)
+                a_file.seek(0)
+
+                str_equivalent_image = base64.b64encode(a_file.getvalue()).decode()
+                img_tag = "data:image/png;base64," + str_equivalent_image
+                dop_data.append(img_tag)
+
+                game_genre[i] = dop_data
             dict_genre_subgenre = {}
             genres = db.session.query(Genre).all()
             for i in genres:
@@ -49,7 +63,8 @@ class Main(Resource):
                 dict_genre_subgenre[i] = list(map(lambda x: x ,subgenres))
             cart_count = len(get_games())
                 
-        except:
+        except Exception as e:
+            print(e)
             # return page with no games
             flash('Something went wrong!', category='warning')
             return make_response(render_template("main.html",games = {}, dict_genre_subgenre = {}), 200)

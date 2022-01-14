@@ -1,8 +1,9 @@
-from flask import make_response, render_template, request, flash, redirect, url_for, abort
+from flask import make_response, render_template, request, flash, redirect, url_for
 from flask_restful import Resource
-from src import app, db
+from src import db
 from src.database.models import GameGenreSubgenre, User, Genre, GenreSubgenre, Subgenre, Game
 from src.token import get_user_by_token, token_required, role_handler, get_games
+from src.aws_func import upload_img
 
 
 class AddGame(Resource):
@@ -34,11 +35,13 @@ class AddGame(Resource):
             if len(title_to)<2 or len(title_to)>40:
                 to_flash.append("Name must be less than 40 characters")
             description_to = content["description"]
-            if len(description_to)<2 or len(description_to)>40:
+            if len(description_to)<2 or len(description_to)>1000:
                 to_flash.append("Description must be less than 300 characters")
             price_to = content["price"]
             if not price_to.isdecimal():
                 to_flash.append("Price must be natural number")
+            image = request.files['img']  # get file
+
         except Exception as e:
             flash("Something went wrong",category='danger')
             return redirect(url_for('addgame'))
@@ -59,6 +62,9 @@ class AddGame(Resource):
             db.session.commit()
             flash("Game has been successfully created",category='success')
             game = db.session.query(Game).filter_by(title = title_to).first()
+
+            upload_img(image,game.uuid)
+
             for i in content:
                 try:
                     if i[0:5] == "Genre":

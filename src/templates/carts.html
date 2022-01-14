@@ -19,8 +19,8 @@
             {% for i in games %}
             <div class="container mb-3" style="width: 85%; height: 200px; border: 3px solid black;">
                 <div class="d-flex justify-content-start mt-3 mb-3">
-                    <img src="https://image.api.playstation.com/vulcan/img/rnd/202009/2913/09xDToHiETDsJxINSzIVOQ4t.jpg" alt="image" style="height: 150px;">
-                    <div class="container m-4">
+                    <img src="{{ games[i] }}" alt="image" style="height: 150px;">
+                    <div class="container mt-4">
                         <a style="text-decoration: none;" href="{{ url_for('game', uuid=i.uuid) }}"><p style="font-size: 20px;">{{ i.title }}</p></a>
                         <h3 id="price{{ i.title }}">${{ i.price }}</h3>
                     </div>
