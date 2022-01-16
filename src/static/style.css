@@ -136,3 +136,12 @@ figure {
 .holder:hover .manage_block{
   display:block;
 }
+
+.round {
+  border-radius: 200px; /* Радиус скругления */
+  border: 2px solid rgb(255, 255, 255); /* Параметры рамки */
+  height: 300px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+ }

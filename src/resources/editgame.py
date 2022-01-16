@@ -67,8 +67,8 @@ class EditGame(Resource):
             game = db.session.query(Game).filter_by(title = title_to).first()
             try:
                 image = request.files['img']  # get file
-            except Exception as e:
-                print(e)
+            except:
+                pass
             else:
                 upload_img(image,game.uuid)
             

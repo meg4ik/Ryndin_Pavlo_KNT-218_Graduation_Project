@@ -63,8 +63,7 @@ class Main(Resource):
                 dict_genre_subgenre[i] = list(map(lambda x: x ,subgenres))
             cart_count = len(get_games())
                 
-        except Exception as e:
-            print(e)
+        except:
             # return page with no games
             flash('Something went wrong!', category='warning')
             return make_response(render_template("main.html",games = {}, dict_genre_subgenre = {}), 200)

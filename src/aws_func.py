@@ -5,3 +5,8 @@ def upload_img(file, object_name):
     bytesio = BytesIO(file.read())
     ext = file.filename[-4:]
     aws_client.upload_fileobj(bytesio, "gamestorebucket", object_name+ext, ExtraArgs=None)
+
+def upload_user_img(file, object_name):
+    bytesio = BytesIO(file.read())
+    ext = file.filename[-4:]
+    aws_client.upload_fileobj(bytesio, "gamestoreuserbucket", object_name+ext, ExtraArgs=None)

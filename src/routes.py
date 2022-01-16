@@ -10,6 +10,7 @@ from src.resources.buygame import BuyGame
 from src.resources.carts import Carts
 from src.resources.order import Order
 from src.resources.editgame import EditGame
+from src.resources.user import User
 
 
 #
@@ -27,6 +28,7 @@ api.add_resource(BuyGame, '/buygame', strict_slashes=False)
 api.add_resource(Carts, '/carts', strict_slashes=False)
 api.add_resource(Order, '/order', strict_slashes=False)
 api.add_resource(EditGame, '/editgame/<uuid>', strict_slashes=False)
+api.add_resource(User, '/user/<uuid>', strict_slashes=False)
 
 # handling of 404 page error
 @app.errorhandler(404)
