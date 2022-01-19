@@ -36,6 +36,15 @@
                <ul class="navbar-nav">
                   {% if not is_nav %}
                      {% if user %}
+                        <li class="nav-item">
+                           <div class="img_wrap_user_icon mt-2">
+                              {% if user_icon %}
+                                 <img src="{{ user_icon }}" alt="image">
+                              {% else %}
+                                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Breezeicons-actions-22-im-user.svg/1200px-Breezeicons-actions-22-im-user.svg.png" alt="image">
+                              {% endif %}
+                           </div>
+                        </li>
                         <li class="nav-item mr-3">
                            <a class="nav-link mt-1" href="{{ url_for('user', uuid=user.uuid) }}" >{{ user.surname }} {{ user.name }}</a>
                         </li>

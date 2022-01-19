@@ -3,9 +3,8 @@ from flask_restful import Resource
 from src.token import get_user_by_token, get_games, token_required
 from src.database.models import User, Role, Game, GenreSubgenre, GameGenreSubgenre, Genre, Subgenre
 from src import db
-from io import BytesIO
-from src import aws_client
-import base64
+
+from src.aws_func import get_aws_image
 
 class Main(Resource):
 
@@ -47,12 +46,7 @@ class Main(Resource):
                         genres = gen_sub[0].title
                 dop_data.append(genres)
 
-                a_file = BytesIO()
-                aws_client.download_fileobj("gamestorebucket", i.uuid+".jpg", a_file)
-                a_file.seek(0)
-
-                str_equivalent_image = base64.b64encode(a_file.getvalue()).decode()
-                img_tag = "data:image/png;base64," + str_equivalent_image
+                img_tag = get_aws_image("gamestorebucket", i.uuid)
                 dop_data.append(img_tag)
 
                 game_genre[i] = dop_data
@@ -69,10 +63,15 @@ class Main(Resource):
             return make_response(render_template("main.html",games = {}, dict_genre_subgenre = {}), 200)
         try:
             user = get_user_by_token()
+            try:
+                user_icon = get_aws_image("gamestoreuserbucket", user.uuid)
+            except:
+                user_icon=False
+
         except:
             # return page with no user session
             return make_response(render_template("main.html",games = game_genre, dict_genre_subgenre = dict_genre_subgenre), 200)
         # return page in user session
         role = Role.query.join(User).filter_by(username=user.username).first()
         
-        return make_response(render_template("main.html", user=user, user_code=role.code, games = game_genre, dict_genre_subgenre = dict_genre_subgenre, cart_count=cart_count), 202)
+        return make_response(render_template("main.html", user=user, user_code=role.code, games = game_genre, dict_genre_subgenre = dict_genre_subgenre, cart_count=cart_count, user_icon=user_icon), 202)

@@ -7,6 +7,7 @@ from src import db
 from io import BytesIO
 from src import aws_client
 import base64
+from src.aws_func import get_aws_image
 
 class Game(Resource):
     def get(self, uuid):
@@ -32,21 +33,21 @@ class Game(Resource):
                 user_comment_list.append(date)
                 user_comment.append(user_comment_list)
             cart_count = len(get_games())
-            a_file = BytesIO()
-            aws_client.download_fileobj("gamestorebucket", game_obj.uuid+".jpg", a_file)
-            a_file.seek(0)
-            str_equivalent_image = base64.b64encode(a_file.getvalue()).decode()
-            img_tag = "data:image/png;base64," + str_equivalent_image
+            img_tag = get_aws_image("gamestorebucket", game_obj.uuid)
 
-        except Exception as e:
+        except:
             flash('Something went wrong!', category='warning')
             return redirect(url_for('main'))
 
         try:
             user = get_user_by_token()
+            try:
+                user_icon = get_aws_image("gamestoreuserbucket", user.uuid)
+            except:
+                user_icon=False
         except:
             return make_response(render_template("game.html", dict_genre_subgenre = dict_genre_subgenre, game = game_obj, user_comment = user_comment, cart_count=cart_count, image=img_tag), 200)
-        return make_response(render_template("game.html",user=user, game = game_obj, dict_genre_subgenre=dict_genre_subgenre, user_comment = user_comment,cart_count=cart_count, image=img_tag), 200)
+        return make_response(render_template("game.html",user=user, game = game_obj, dict_genre_subgenre=dict_genre_subgenre, user_comment = user_comment,cart_count=cart_count, image=img_tag, user_icon=user_icon), 200)
 
     @token_required
     def post(self, uuid):

@@ -3,7 +3,7 @@ from flask_restful import Resource
 from src import db
 from src.database.models import GameGenreSubgenre, User, Genre, GenreSubgenre, Subgenre, Game
 from src.token import get_user_by_token, token_required, role_handler, get_games
-from src.aws_func import upload_img
+from src.aws_func import upload_img, get_aws_image
 
 
 class AddGame(Resource):
@@ -14,6 +14,10 @@ class AddGame(Resource):
     def get(self):
         try:
             user = get_user_by_token()
+            try:
+                user_icon = get_aws_image("gamestoreuserbucket", user.uuid)
+            except:
+                user_icon=False
         except:
             # return page with no user session
             return make_response(render_template("main.html",), 200)
@@ -23,7 +27,7 @@ class AddGame(Resource):
             subgenres =  db.session.query(Subgenre).join(GenreSubgenre).filter_by(genre_id = i.id).all()
             dict_genre_subgenre[i] = list(map(lambda x: x ,subgenres))
         cart_count = len(get_games())
-        return make_response(render_template("addgame.html",user=user, dict_genre_subgenre = dict_genre_subgenre, cart_count=cart_count), 200)
+        return make_response(render_template("addgame.html",user=user, dict_genre_subgenre = dict_genre_subgenre, cart_count=cart_count, user_icon=user_icon), 200)
         
     @role_handler(RESOURCE_ROLES)
     @token_required

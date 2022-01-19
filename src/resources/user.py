@@ -3,12 +3,10 @@ from flask_restful import Resource
 from src.token import get_user_by_token, token_required, get_games
 from src.database.models import Role
 from src.database.models import User as UserModel
-from src import db, aws_client
-from io import BytesIO
-import base64
+from src import db
 import re
 from flask_bcrypt import generate_password_hash
-from src.aws_func import upload_user_img
+from src.aws_func import upload_user_img, get_aws_image
 
 class User(Resource):
     @token_required
@@ -20,22 +18,22 @@ class User(Resource):
                 flash("Not such user",category='danger')
                 return redirect(url_for('main'))
             curr_user = get_user_by_token()
+            try:
+                user_icon = get_aws_image("gamestoreuserbucket", curr_user.uuid)
+            except:
+                user_icon=False
             role = Role.query.join(UserModel).filter_by(uuid=curr_user.uuid).first()
             roles = db.session.query(Role).all()
             user_view_role = db.session.query(Role).join(UserModel).filter_by(uuid=user_obj.uuid).first()
             cart_count = len(get_games())
             try:
-                a_file = BytesIO()
-                aws_client.download_fileobj("gamestoreuserbucket", user_obj.uuid+".jpg", a_file)
-                a_file.seek(0)
-                str_equivalent_image = base64.b64encode(a_file.getvalue()).decode()
-                img_tag = "data:image/png;base64," + str_equivalent_image
+                img_tag = get_aws_image("gamestoreuserbucket", user_obj.uuid)
             except:
                 img_tag = False
         except:
             flash('Something went wrong!', category='warning')
             return redirect(url_for('main'))
-        return make_response(render_template("user.html",user=curr_user, user_view = user_obj, user_role=role,user_view_role = user_view_role, roles = roles, cart_count=cart_count, image=img_tag), 200)
+        return make_response(render_template("user.html",user=curr_user, user_view = user_obj, user_role=role,user_view_role = user_view_role, roles = roles, cart_count=cart_count, image=img_tag, user_icon=user_icon), 200)
     
     @token_required
     def post(self, uuid):

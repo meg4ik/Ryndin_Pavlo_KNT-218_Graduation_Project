@@ -4,9 +4,13 @@
 {% endblock %}
 {% block content %}
   {% if image %}
-      <img src="{{ image }}" class="round" alt="image">
+    <div class="img_wrap_user">
+      <img src="{{ image }}" alt="image">
+    </div>
     {% else %}
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/User_font_awesome.svg/768px-User_font_awesome.svg.png" class="round" alt="image">
+    <div class="img_wrap_user">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/User_font_awesome.svg/768px-User_font_awesome.svg.png" alt="image">
+    </div>
     {% endif %}
   {% if user_role.code == 3 or user.uuid == user_view.uuid %}
   <form class="form col-md-12 center-block" method="POST" enctype="multipart/form-data">
