@@ -1,12 +1,9 @@
 from flask import make_response, render_template, request, flash, redirect, url_for
 from flask_restful import Resource
 from src.token import get_user_by_token, token_required, get_games
-from src.database.models import User, Role, GenreSubgenre, GameGenreSubgenre, Genre, Subgenre, Comment
+from src.database.models import User, GenreSubgenre, GameGenreSubgenre, Genre, Subgenre, Comment
 from src.database.models import Game as GameModel
 from src import db
-from io import BytesIO
-from src import aws_client
-import base64
 from src.aws_func import get_aws_image
 
 class Game(Resource):
@@ -17,10 +14,13 @@ class Game(Resource):
                 #return main page
                 flash("Not such a game",category='danger')
                 return redirect(url_for('main'))
+            if not game_obj.is_visible or game_obj.is_delete:
+                flash("Not such a game",category='danger')
+                return redirect(url_for('main'))
             gen_sub = db.session.query(Genre).join(GenreSubgenre).join(GameGenreSubgenre).filter_by(game_id=game_obj.id).all()
             dict_genre_subgenre = {}
             for i in gen_sub:
-                subgenres =  db.session.query(Subgenre).join(GenreSubgenre).filter_by(genre_id = i.id).all()
+                subgenres =  db.session.query(Subgenre).join(GenreSubgenre).filter_by(genre_id = i.id).join(GameGenreSubgenre).filter_by(game_id=game_obj.id).all()
                 dict_genre_subgenre[i] = list(map(lambda x: x ,subgenres))
             user_comment = []
             comments = db.session.query(Comment).filter_by(game_id_from = game_obj.id).all()

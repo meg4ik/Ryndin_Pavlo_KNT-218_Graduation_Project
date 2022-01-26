@@ -1,6 +1,6 @@
-from flask import make_response, render_template, request, flash, redirect, url_for
+from flask import make_response, render_template, request, flash
 from flask_restful import Resource
-from src.token import get_user_by_token, get_games, token_required
+from src.token import get_user_by_token, get_games
 from src.database.models import User, Role, Game, GenreSubgenre, GameGenreSubgenre, Genre, Subgenre
 from src import db
 
@@ -15,6 +15,8 @@ class Main(Resource):
             is_genre_game = True
             for i in content:
                 if content[i] == "Genre":
+                    if_sub = db.session.query(GenreSubgenre).join(Genre).filter_by(title=i[6:]).all()
+                    print(if_sub)
                     curr_games = db.session.query(Game).join(GameGenreSubgenre).join(GenreSubgenre).join(Genre).filter_by(title=i[6:]).all()
                     if isinstance(curr_games, list):
                         for j in curr_games:

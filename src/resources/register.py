@@ -1,6 +1,6 @@
 from flask import make_response, render_template, request, flash, redirect, url_for
 from flask_restful import Resource
-from src import app, db
+from src import db
 from src.database.models import User
 import re
 from src.token import get_user_by_token

@@ -1,7 +1,7 @@
 from flask import make_response, render_template, request, flash, redirect, url_for
 from flask_restful import Resource
 from src import db
-from src.database.models import GameGenreSubgenre, User, Genre, GenreSubgenre, Subgenre, Game
+from src.database.models import GameGenreSubgenre, Genre, GenreSubgenre, Subgenre, Game
 from src.token import get_user_by_token, token_required, role_handler, get_games
 from src.aws_func import upload_img, get_aws_image
 

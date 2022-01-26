@@ -2,8 +2,7 @@ from src import app
 
 # TODO
 # коментарии
-# доработка фильтра
-# лого
+# permissions
 # автотесты
 
 
