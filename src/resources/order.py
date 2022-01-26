@@ -1,10 +1,13 @@
 from flask import make_response, render_template, request, flash, redirect, url_for
 from flask_restful import Resource
-from src.token import get_user_by_token, token_required, get_games
+from src.token import get_user_by_token, token_required, get_games, role_handler
 import re
 from src.aws_func import get_aws_image
 
+RESOURCE_ROLES = [1]
+
 class Order(Resource):
+    @role_handler(RESOURCE_ROLES)
     @token_required
     def get(self):
         try:
@@ -49,7 +52,7 @@ class Order(Resource):
                 if len(comment)>300:
                     to_flash.append("Comment be less than 300 characters")
 
-        except Exception as e:
+        except:
             flash("Something went wrong",category='danger')
             return redirect(url_for('order'))
 

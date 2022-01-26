@@ -45,7 +45,7 @@ class Register(Resource):
             new_password_repeat = request.form.get('password_repeat')
             if new_password !=new_password_repeat:
                 to_flash.append("Password mismatch")
-        except Exception as e:
+        except:
             flash("Something went wrong",category='danger')
             return redirect(url_for('register'))
 

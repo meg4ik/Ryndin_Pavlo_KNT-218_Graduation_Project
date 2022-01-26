@@ -46,7 +46,7 @@ class AddGame(Resource):
                 to_flash.append("Price must be natural number")
             image = request.files['img']  # get file
 
-        except Exception as e:
+        except:
             flash("Something went wrong",category='danger')
             return redirect(url_for('addgame'))
         if to_flash:

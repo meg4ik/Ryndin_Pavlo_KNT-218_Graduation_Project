@@ -45,4 +45,5 @@ class Logout(Resource):
     def post(self):
         response = make_response(redirect(url_for('main')))
         response.set_cookie('token', expires=0)
+        response.set_cookie('gamelist', "")
         return response
