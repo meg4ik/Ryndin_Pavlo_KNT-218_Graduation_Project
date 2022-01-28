@@ -2,7 +2,6 @@ from src import app
 
 # TODO
 # коментарии
-# permissions
 # автотесты
 
 

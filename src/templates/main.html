@@ -55,7 +55,7 @@
                     <p class="m-0">{{ games[i][0] }}</p>
                     <h5>{{ i.title }}</h5>
                   </div>
-                  <div class="manage_block">
+                  <div data-href="{{ url_for('game' ,uuid=i.uuid) }}" class="manage_block">
                     <a href="{{ url_for('editgame', uuid=i.uuid) }}" class="btn btn-link nav-link" style="color: black; font-size: 22px; margin-top: 120px;" ><i class="fa fa-edit" aria-hidden="true"></i>Edit Game</a>
                   <form action="{{ url_for('addgame') }}" class="ajax_del_game" style="margin-left: 60px;">
                     <input type="hidden" name="del_game_uuid" value="{{ i.uuid }}" />

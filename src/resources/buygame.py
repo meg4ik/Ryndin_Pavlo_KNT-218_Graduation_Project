@@ -1,9 +1,11 @@
 from flask import make_response, request, flash, redirect, url_for
 from flask_restful import Resource
-from src.token import token_required
+from src.token import role_handler
+
+RESOURCE_ROLES = [0, 1]
 
 class BuyGame(Resource):
-    @token_required
+    @role_handler(RESOURCE_ROLES)
     def post(self):
         try:
             game_uuid = request.form.to_dict().get('game')

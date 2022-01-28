@@ -45,13 +45,15 @@ def role_handler(roles):
             #wrapper of current func
             try:
                 user = get_user_by_token()
-                role = Role.query.join(User).filter_by(username=user.username).first()
             except:
-                flash("You have no permission for this page!", category='danger')
-                return redirect(url_for('main'))
-            if not role.code in roles:
-                flash("You have no permission for this page!", category='danger')
-                return redirect(url_for('main'))
+                if not 0 in roles:
+                    flash("You have no permission for this page!", category='danger')
+                    return redirect(url_for('main'))
+            else:
+                role = Role.query.join(User).filter_by(username=user.username).first()
+                if not role.code in roles:
+                    flash("You have no permission for this page!", category='danger')
+                    return redirect(url_for('main'))
             return func(self, *args, **kwargs)
         return wrapper
     return dec
