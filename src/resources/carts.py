@@ -30,7 +30,7 @@ class Carts(Resource):
                 user_icon=False
         except:
             return make_response(render_template("carts.html", games = game_img, total_price = total, cart_count=cart_count), 200)
-        return make_response(render_template("carts.html",user=user, games = game_img, total_price = total, cart_count=cart_count, user_icon=user_icon), 200)
+        return make_response(render_template("carts.html",user=user, games = game_img, total_price = total, cart_count=cart_count, user_icon=user_icon), 202)
 
     def post(self):
         try:

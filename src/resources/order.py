@@ -1,6 +1,6 @@
 from flask import make_response, render_template, request, flash, redirect, url_for
 from flask_restful import Resource
-from src.token import get_user_by_token, token_required, get_games, role_handler
+from src.token import get_user_by_token, get_games, role_handler
 import re
 from src.aws_func import get_aws_image
 
@@ -25,7 +25,7 @@ class Order(Resource):
         except:
             return make_response(render_template("order.html", games = games, cart_count=cart_count), 200)
 
-        return make_response(render_template("order.html",user=user, games = games, cart_count=cart_count, user_icon=user_icon), 200)
+        return make_response(render_template("order.html",user=user, games = games, cart_count=cart_count, user_icon=user_icon), 202)
 
     def post(self):
         to_flash = []

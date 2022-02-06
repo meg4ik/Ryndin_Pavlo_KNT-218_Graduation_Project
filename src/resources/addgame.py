@@ -27,7 +27,7 @@ class AddGame(Resource):
             subgenres =  db.session.query(Subgenre).join(GenreSubgenre).filter_by(genre_id = i.id).all()
             dict_genre_subgenre[i] = list(map(lambda x: x ,subgenres))
         cart_count = len(get_games())
-        return make_response(render_template("addgame.html",user=user, dict_genre_subgenre = dict_genre_subgenre, cart_count=cart_count, user_icon=user_icon), 200)
+        return make_response(render_template("addgame.html",user=user, dict_genre_subgenre = dict_genre_subgenre, cart_count=cart_count, user_icon=user_icon), 202)
         
     @role_handler(RESOURCE_ROLES)
     @token_required

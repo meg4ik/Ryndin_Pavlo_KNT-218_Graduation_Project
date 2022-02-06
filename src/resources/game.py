@@ -47,7 +47,7 @@ class Game(Resource):
                 user_icon=False
         except:
             return make_response(render_template("game.html", dict_genre_subgenre = dict_genre_subgenre, game = game_obj, user_comment = user_comment, cart_count=cart_count, image=img_tag), 200)
-        return make_response(render_template("game.html",user=user, game = game_obj, dict_genre_subgenre=dict_genre_subgenre, user_comment = user_comment,cart_count=cart_count, image=img_tag, user_icon=user_icon), 200)
+        return make_response(render_template("game.html",user=user, game = game_obj, dict_genre_subgenre=dict_genre_subgenre, user_comment = user_comment,cart_count=cart_count, image=img_tag, user_icon=user_icon), 202)
 
     @token_required
     def post(self, uuid):
