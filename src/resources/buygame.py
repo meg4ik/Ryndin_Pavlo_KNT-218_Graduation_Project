@@ -8,6 +8,7 @@ class BuyGame(Resource):
     @role_handler(RESOURCE_ROLES)
     def post(self):
         try:
+            #set cookie with list of game uuid
             game_uuid = request.form.to_dict().get('game')
             gamelist = request.cookies.get('gamelist')
             if not gamelist:

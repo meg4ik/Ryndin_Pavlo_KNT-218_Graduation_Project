@@ -17,6 +17,7 @@ class Order(Resource):
             return redirect(url_for('main'))
 
         try:
+            #get user and user img
             user = get_user_by_token()
             try:
                 user_icon = get_aws_image("gamestoreuserbucket", user.uuid)
@@ -30,25 +31,28 @@ class Order(Resource):
     def post(self):
         to_flash = []
         try:
+            #check name
             name = request.form.get('name')
             if len(name)>30 or len(name)==0:
                 to_flash.append("Name must be less than 30 characters")
+            #check surname
             last_name = request.form.get('surname')
             if len(last_name)>30 or len(last_name)==0:
                 to_flash.append("Last name be less than 30 characters")
-            new_surname = request.form.get('surname')
-
+            #check email
             new_email = request.form.get('email_address')
             regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
             if not(re.fullmatch(regex, new_email)):
                 to_flash.append("Invalid Email")
-
+            #check phone
             phone = request.form.get('phone')
             if not phone:
                 to_flash.append("Invalid Phone")
+            #check payment type
             payment = request.form.get('payment')
             if payment != "card" and payment != "cash":
                 to_flash.append("Invalid payment type")
+            #check comment
             comment = request.form.get('comment')
             if comment:
                 if len(comment)>300:
@@ -57,7 +61,7 @@ class Order(Resource):
         except:
             flash("Something went wrong",category='danger')
             return redirect(url_for('order'))
-
+        #return page with errors
         if to_flash:
             for num, mess in enumerate(to_flash):
                 flash(mess,category='danger')
@@ -65,6 +69,7 @@ class Order(Resource):
                     break
             return redirect(url_for('order'))
         else:
+            #success order
             flash("The order was completed successfully",category='success')
             response = make_response(redirect(url_for('main')))
             response.set_cookie('gamelist', "")

@@ -19,6 +19,7 @@ class Register(Resource):
     def post(self):
         to_flash = []
         try:
+            #check username
             new_username = request.form.get('username')
             u = db.session.query(User).filter_by(username = new_username).first()
             if u:
@@ -31,7 +32,7 @@ class Register(Resource):
             new_surname = request.form.get('surname')
             if len(new_surname)>30:
                 to_flash.append("Surname must be less than 30 characters")
-
+            #check email
             new_email = request.form.get('email_address')
             regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
             if not(re.fullmatch(regex, new_email)):
@@ -39,16 +40,18 @@ class Register(Resource):
             e = db.session.query(User).filter_by(email_address = new_email).first()
             if e:
                 to_flash.append("User with email as \"{}\" already exist".format(new_email))
+            #check password
             new_password = request.form.get('password')
             if len(new_password) < 5 or len(new_password) > 50:
                 to_flash.append("Password must be more than 5 and less than 50 characters")
+            #check repeat password
             new_password_repeat = request.form.get('password_repeat')
             if new_password !=new_password_repeat:
                 to_flash.append("Password mismatch")
         except:
             flash("Something went wrong",category='danger')
             return redirect(url_for('register'))
-
+        #return page with errors
         if to_flash:
             for num, mess in enumerate(to_flash):
                 flash(mess,category='danger')
@@ -56,6 +59,7 @@ class Register(Resource):
                     break
             return redirect(url_for('register'))
         else:
+            #create user
             try:
                 u = User(
                     username=new_username,
@@ -68,7 +72,7 @@ class Register(Resource):
                 db.session.add(u)
                 db.session.commit()
                 db.session.close()
-            except Exception as e:
+            except:
                 flash("Something went wrong",category='danger')
                 return redirect(url_for('register'))
             else:

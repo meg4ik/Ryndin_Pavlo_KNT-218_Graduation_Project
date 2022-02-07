@@ -43,6 +43,7 @@ class Logout(Resource):
         flash('Method is not allowed', category='danger')
         return redirect(url_for('main'))
     def post(self):
+        #set token expires as 0 to logout
         response = make_response(redirect(url_for('main')))
         response.set_cookie('token', expires=0)
         response.set_cookie('gamelist', "")

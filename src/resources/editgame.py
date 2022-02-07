@@ -27,6 +27,7 @@ class EditGame(Resource):
             subgenres =  db.session.query(Subgenre).join(GenreSubgenre).filter_by(genre_id = i.id).all()
             dict_genre_subgenre[i] = list(map(lambda x: x ,subgenres))
         cart_count = len(get_games())
+        #return page with sesison
         return make_response(render_template("editgame.html",user=user, game=game, dict_genre_subgenre = dict_genre_subgenre, cart_count=cart_count, user_icon=user_icon), 200)
 
     @role_handler(RESOURCE_ROLES)
@@ -35,15 +36,19 @@ class EditGame(Resource):
         content = request.form.to_dict()
         to_flash = []
         try:
+            #check name
             title_to = content["name"]
             if len(title_to)<2 or len(title_to)>40:
                 to_flash.append("Name must be less than 40 characters")
+            #check description
             description_to = content["description"]
             if len(description_to)<2 or len(description_to)>1000:
                 to_flash.append("Description must be less than 300 characters")
+            #check price
             price_to = content["price"]
             if not price_to.isdecimal():
                 to_flash.append("Price must be natural number")
+            #check is visible
             is_visible = True
             if "is_visible" in content.keys():
                 is_visible = False
@@ -51,6 +56,7 @@ class EditGame(Resource):
         except:
             flash("Something went wrong",category='danger')
             return redirect(url_for('addgame'))
+        #return if errors
         if to_flash:
             for num, mess in enumerate(to_flash):
                 flash(mess,category='danger')
@@ -59,6 +65,7 @@ class EditGame(Resource):
             return redirect(url_for('addgame'))
 
         else:
+            #update game
             db.session.query(Game).filter_by(uuid = uuid).update(
                 dict(
                     title=title_to,
@@ -80,7 +87,7 @@ class EditGame(Resource):
             for i in g:
                 db.session.delete(i)
             db.session.commit()
-
+            #set genre and subgenres
             for i in content:
                 try:
                     if i[0:5] == "Genre":

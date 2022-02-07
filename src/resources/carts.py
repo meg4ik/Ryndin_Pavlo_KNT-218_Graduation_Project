@@ -11,6 +11,7 @@ class Carts(Resource):
         try:
             games = get_games()
             game_img = {}
+            #carts img
             for i in games:
                 img_tag = get_aws_image("gamestorebucket", i.uuid)
                 game_img[i]=img_tag
@@ -22,6 +23,7 @@ class Carts(Resource):
         except:
             flash('Something went wrong!', category='warning')
             return redirect(url_for('main'))
+        #user img
         try:
             user = get_user_by_token()
             try:
@@ -30,13 +32,16 @@ class Carts(Resource):
                 user_icon=False
         except:
             return make_response(render_template("carts.html", games = game_img, total_price = total, cart_count=cart_count), 200)
+        #return page with session
         return make_response(render_template("carts.html",user=user, games = game_img, total_price = total, cart_count=cart_count, user_icon=user_icon), 202)
 
     def post(self):
         try:
+            #if delete
             game_uuid = request.form.to_dict().get('delete')
             gamelist = request.cookies.get('gamelist')
             new_game_list = ""
+            #delete from cookie list
             if gamelist:
                 m = gamelist.split('&')
                 for i in m:
@@ -45,6 +50,7 @@ class Carts(Resource):
                             new_game_list=i
                         else:
                             new_game_list+="{}{}".format('&', i)
+            #set new cookie list
             response = make_response(redirect(url_for('carts')))
             response.set_cookie('gamelist', new_game_list)
             return response

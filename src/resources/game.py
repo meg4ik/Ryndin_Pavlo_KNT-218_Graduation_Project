@@ -17,11 +17,13 @@ class Game(Resource):
             if not game_obj.is_visible or game_obj.is_delete:
                 flash("Not such a game",category='danger')
                 return redirect(url_for('main'))
+            #create genre subgenre dict
             gen_sub = db.session.query(Genre).join(GenreSubgenre).join(GameGenreSubgenre).filter_by(game_id=game_obj.id).all()
             dict_genre_subgenre = {}
             for i in gen_sub:
                 subgenres =  db.session.query(Subgenre).join(GenreSubgenre).filter_by(genre_id = i.id).join(GameGenreSubgenre).filter_by(game_id=game_obj.id).all()
                 dict_genre_subgenre[i] = list(map(lambda x: x ,subgenres))
+            #compose game comments
             user_comment = []
             comments = db.session.query(Comment).filter_by(game_id_from = game_obj.id).all()
             for i in comments:
@@ -38,7 +40,7 @@ class Game(Resource):
         except:
             flash('Something went wrong!', category='warning')
             return redirect(url_for('main'))
-
+        #get user and user image
         try:
             user = get_user_by_token()
             try:
@@ -47,6 +49,7 @@ class Game(Resource):
                 user_icon=False
         except:
             return make_response(render_template("game.html", dict_genre_subgenre = dict_genre_subgenre, game = game_obj, user_comment = user_comment, cart_count=cart_count, image=img_tag), 200)
+        #retuen page with user session
         return make_response(render_template("game.html",user=user, game = game_obj, dict_genre_subgenre=dict_genre_subgenre, user_comment = user_comment,cart_count=cart_count, image=img_tag, user_icon=user_icon), 202)
 
     @token_required
@@ -57,6 +60,7 @@ class Game(Resource):
                 #return main page
                 flash("Not such a game",category='danger')
                 return redirect(url_for('main'))
+        #add comment
         try:
             content = request.form.to_dict()
             reply_to_message_uuid = content.get('reply_to_message_uuid')
@@ -64,6 +68,7 @@ class Game(Resource):
             if reply_to_message_uuid:
                 rep_com = db.session.query(Comment).filter_by(uuid=reply_to_message_uuid).first()
                 reply_to_message_id = rep_com.id
+            #add comment
             com = Comment(
                 text=content.get('comment'),
                 reply_to_message_id=reply_to_message_id,

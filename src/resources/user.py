@@ -3,10 +3,11 @@ from flask_restful import Resource
 from src.token import get_user_by_token, token_required, get_games
 from src.database.models import Role
 from src.database.models import User as UserModel
+from src.aws_func import upload_user_img, get_aws_image
 from src import db
 import re
 from flask_bcrypt import generate_password_hash
-from src.aws_func import upload_user_img, get_aws_image
+
 
 class User(Resource):
     @token_required
@@ -17,15 +18,18 @@ class User(Resource):
                 #return main page
                 flash("Not such user",category='danger')
                 return redirect(url_for('main'))
+            #get auth user img
             curr_user = get_user_by_token()
             try:
                 user_icon = get_aws_image("gamestoreuserbucket", curr_user.uuid)
             except:
                 user_icon=False
+            #current user role
             role = Role.query.join(UserModel).filter_by(uuid=curr_user.uuid).first()
             roles = db.session.query(Role).all()
             user_view_role = db.session.query(Role).join(UserModel).filter_by(uuid=user_obj.uuid).first()
             cart_count = len(get_games())
+            #get current user img
             try:
                 img_tag = get_aws_image("gamestoreuserbucket", user_obj.uuid)
             except:
@@ -33,6 +37,7 @@ class User(Resource):
         except:
             flash('Something went wrong!', category='warning')
             return redirect(url_for('main'))
+        #return user page with session
         return make_response(render_template("user.html",user=curr_user, user_view = user_obj, user_role=role,user_view_role = user_view_role, roles = roles, cart_count=cart_count, image=img_tag, user_icon=user_icon), 200)
     
     @token_required
@@ -40,13 +45,15 @@ class User(Resource):
         content = request.form.to_dict()
         to_flash = []
         try:
+            #check name
             new_name = content['name']
             if len(new_name)>30:
                 to_flash.append("Name must be less than 30 characters")
+            #check surname
             new_surname = content['surname']
             if len(new_surname)>30:
                 to_flash.append("Surname must be less than 30 characters")
-
+            #check email
             new_email = content['email_address']
             regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
             if not(re.fullmatch(regex, new_email)):
@@ -55,6 +62,7 @@ class User(Resource):
             user_obj = db.session.query(UserModel).filter_by(uuid = uuid).first()
             if e and e !=get_user_by_token() and e !=user_obj:
                 to_flash.append("User with email as \"{}\" already exist".format(new_email))
+            #if password then check password
             p=True
             if 'password' in content.keys() and 'password_repeat' in content.keys():
                 if len(content['password'])>0 and len(content['password_repeat'])>0:
@@ -73,6 +81,7 @@ class User(Resource):
         except:
             flash("Something went wrong",category='warning')
             return redirect(url_for('user', uuid=uuid))
+        #return page with errors
         if to_flash:
             for num, mess in enumerate(to_flash):
                 flash(mess,category='danger')
@@ -80,6 +89,7 @@ class User(Resource):
                     break
             return redirect(url_for('user', uuid=uuid))
         else:
+            #update user info
             db.session.query(UserModel).filter_by(uuid = uuid).update(
                 dict(
                     name=new_name,
@@ -89,7 +99,7 @@ class User(Resource):
                 )
             )
             db.session.commit()
-
+            #update password
             if p:
                 db.session.query(UserModel).filter_by(uuid = uuid).update(
                 dict(
@@ -98,6 +108,7 @@ class User(Resource):
                 db.session.commit()
 
             user = db.session.query(UserModel).filter_by(uuid=uuid).first()
+            #update user img
             try:
                 image = request.files['img']  # get file
             except:
@@ -106,4 +117,5 @@ class User(Resource):
                 upload_user_img(image,user.uuid)
             db.session.close()
             flash("User has been successfully updated",category='success')
+            #successfully updated
             return redirect(url_for('user', uuid=uuid))

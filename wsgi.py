@@ -1,8 +1,7 @@
 from src import app
 
 # TODO
-# коментарии
-# автотесты
+#nothing
 
 
 #app starting here
