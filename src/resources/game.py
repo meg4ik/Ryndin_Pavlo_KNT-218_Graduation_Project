@@ -1,7 +1,7 @@
 from flask import make_response, render_template, request, flash, redirect, url_for
 from flask_restful import Resource
 from src.token import get_user_by_token, token_required, get_games
-from src.database.models import User, GenreSubgenre, GameGenreSubgenre, Genre, Subgenre, Comment
+from src.database.models import User, GenreSubgenre, GameGenreSubgenre, Genre, Subgenre, Comment, Role
 from src.database.models import Game as GameModel
 from src import db
 from src.aws_func import get_aws_image
@@ -43,6 +43,7 @@ class Game(Resource):
         #get user and user image
         try:
             user = get_user_by_token()
+            role = Role.query.join(User).filter_by(uuid=user.uuid).first()
             try:
                 user_icon = get_aws_image("gamestoreuserbucket", user.uuid)
             except:
@@ -50,7 +51,7 @@ class Game(Resource):
         except:
             return make_response(render_template("game.html", dict_genre_subgenre = dict_genre_subgenre, game = game_obj, user_comment = user_comment, cart_count=cart_count, image=img_tag), 200)
         #retuen page with user session
-        return make_response(render_template("game.html",user=user, game = game_obj, dict_genre_subgenre=dict_genre_subgenre, user_comment = user_comment,cart_count=cart_count, image=img_tag, user_icon=user_icon), 202)
+        return make_response(render_template("game.html",user=user,user_code=role.code, game = game_obj, dict_genre_subgenre=dict_genre_subgenre, user_comment = user_comment,cart_count=cart_count, image=img_tag, user_icon=user_icon), 202)
 
     @token_required
     def post(self, uuid):
@@ -82,6 +83,20 @@ class Game(Resource):
             flash('Something went wrong!', category='warning')
         return redirect(url_for('game', uuid=uuid))
         
+    @token_required
+    def delete(self, uuid):
+        try:
+            user = get_user_by_token()
+            content = request.form.to_dict()
+            comment = db.session.query(Comment).filter_by(uuid=content.get('delete_comment')).first()
+            role = Role.query.join(User).filter_by(uuid=user.uuid).first()
+            if role.code == 2 or role.code == 3 or user.id == comment.user_id_from:
+                db.session.delete(comment)
+                db.session.commit()
+                db.session.close()
+        except:
+            flash('Something went wrong!', category='warning')
+        return redirect(url_for('main'))
         
 
 
