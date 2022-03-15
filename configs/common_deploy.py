@@ -12,6 +12,6 @@ database_pass = os.environ["DATABASE_PASS"].split('\'')[1]
 shema_link = os.environ["SHEMA_LINK"].split('\'')[1]
 
 
-SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:{}@{}'.format(database_pass, shema_link)
+SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://db_user:{}@{}'.format(database_pass, shema_link)
 
 SQLALCHEMY_TRACK_MODIFICATIONS = False
