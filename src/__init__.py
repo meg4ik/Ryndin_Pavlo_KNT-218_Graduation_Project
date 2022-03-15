@@ -37,8 +37,10 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 try:
-    aws_client = boto3.client('s3', aws_access_key_id=environ["ACCESS_KEY_ID"].split('\'')[1],
-                                   aws_secret_access_key=environ["SECRET_ACCESS_KEY"].split('\'')[1])
+    #aws_client = boto3.client('s3', aws_access_key_id=environ["ACCESS_KEY_ID"].split('\'')[1],
+    #                                aws_secret_access_key=environ["SECRET_ACCESS_KEY"].split('\'')[1])
+    aws_client = boto3.client('s3', aws_access_key_id=environ["ACCESS_KEY_ID"],
+                                   aws_secret_access_key=environ["SECRET_ACCESS_KEY"])
     f = True
     for i in aws_client.list_buckets()['Buckets']:
         if i["Name"] == "gamestorebucket":
