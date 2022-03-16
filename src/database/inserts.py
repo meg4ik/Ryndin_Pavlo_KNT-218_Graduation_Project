@@ -191,7 +191,7 @@ def finsert():
         email_address="meg44mag@gmail.com",
         password="totalmag67",
         uuid='90197dc4-1dd7-4838-8283-4c80fd6f1cfc',
-        role_id=db.session.query(Role).filter(Role.title == role1.title).first()
+        code=3
         )
     us2 = User(
         username="usertest",
@@ -200,7 +200,7 @@ def finsert():
         email_address="mogg@mail.com",
         password="qwerty",
         uuid='f4685c53-5b46-4106-abfb-9d76c1fcb4cd',
-        role_id=db.session.query(Role).filter(Role.title == role3.title).first()
+        code=1
         )
 
     db.session.add(us1)
